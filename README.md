@@ -1,9 +1,9 @@
 ## 環境構築
 **Dockerビルド**
 1. `git clone <リポジトリURL>`
-git@github.com:mayu-happy/kadai-test.git
+git@github.com:mayu-happy/mogi-first.git
 2. DockerDesktopアプリを立ち上げる
-3. `cd kadai-test`でファイル移動
+3. `cd mogi-first`でディレクトリ移動
 4. `docker-compose up -d --build`
 
 **Laravel環境構築**
@@ -40,7 +40,7 @@ php artisan db:seed
 - Faker（ダミーデータ生成）
 
 ## ER図
-![ER図](./docs/kadai-er.png)
+<!-- ![ER図](./docs/kadai-er.png) 後で追加-->
 
 ## URL
 - 開発環境：http://localhost
