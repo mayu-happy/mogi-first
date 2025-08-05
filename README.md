@@ -40,7 +40,7 @@ php artisan db:seed
 - Faker（ダミーデータ生成）
 
 ## ER図
-<!-- ![ER図](./docs/kadai-er.png) 後で追加-->
+[ER図](mogi-first.drawio.png)
 
 ## URL
 - 開発環境：http://localhost
