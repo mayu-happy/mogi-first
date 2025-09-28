@@ -1,0 +1,606 @@
+/* ====== レイアウト ====== */
+.item-detail {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.item-detail__grid {
+    display: grid;
+    grid-template-columns: minmax(360px, 560px) minmax(320px, 420px);
+    gap: 40px;
+    align-items: start;
+}
+
+/* 左：画像 */
+.item-detail__image {
+    position: relative;
+}
+
+.item-detail__image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.item-detail__sold {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+    background: rgba(0, 0, 0, .75);
+    color: #fff;
+    font-weight: 700;
+    padding: 6px 10px;
+    border-radius: 6px;
+    letter-spacing: .05em;
+}
+
+/* 右：本文（“共通レール幅”を揃える） */
+:root {
+    --rail: 420px;
+}
+
+.panel-rail {
+    max-width: var(--rail);
+    width: 100%;
+}
+
+/* タイトル＆価格 */
+.item-detail__title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+
+.item-detail__brand {
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.item-detail__price {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 8px 0 4px;
+}
+
+.item-detail__tax {
+    font-size: 12px;
+    color: #666;
+}
+
+.flash-message {
+    max-width: var(--rail);
+    background: #fff4e5;
+    border: 1px solid #ffd8a8;
+    color: #8d5b00;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin: 8px 0;
+}
+
+/* ====== アイコン／カウント ====== */
+.social-stats {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin: 8px 0 12px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+}
+
+.icon {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+}
+
+.count {
+    font-size: 12px;
+    margin-top: 2px;
+    color: #333;
+}
+
+/* ====== ボタン ====== */
+.btn {
+    border: none;
+    border-radius: 6px;
+    padding: 10px 14px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn-full {
+    display: block;
+    width: 100%;
+}
+
+.btn-purchase,
+.btn-primary {
+    background: #ff6b6b;
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-purchase:hover,
+.btn-primary:hover {
+    opacity: .92;
+}
+
+/* ====== セクション ====== */
+.section {
+    margin-top: 18px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 10px;
+}
+
+.item-detail__desc {
+    white-space: pre-wrap;
+}
+
+/* 情報表 */
+.meta-list {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 10px 12px;
+    align-items: start;
+}
+
+.meta-list__label {
+    color: #777;
+}
+
+.badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #f2f2f2;
+    font-size: 12px;
+}
+
+.badge.bg-secondary {
+    background: #e9ecef;
+    color: #555;
+}
+
+/* ====== コメント一覧 ====== */
+.comment-list {
+    display: grid;
+    gap: 10px;
+}
+
+.comment-item {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+.comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.avatar {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #e5e5e5;
+    display: inline-block;
+}
+
+.comment-body {
+    margin: 0;
+    color: #333;
+    font-size: 14px;
+}
+
+.comment-empty {
+    color: #888;
+}
+
+/* ====== コメントフォーム ====== */
+.comment-form {
+    display: grid;
+    gap: 10px;
+}
+
+.input-text {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    background: #fff;
+}
+
+.input-text:focus {
+    border-color: #bbb;
+}
+
+/* アラート */
+.alert {
+    border-radius: 8px;
+    padding: 10px 12px;
+}
+
+.alert-danger {
+    background: #ffe3e3;
+    border: 1px solid #ffa8a8;
+    color: #7f1d1d;
+}
+
+/* ====== レスポンシブ ====== */
+@media (max-width: 900px) {
+    .item-detail__grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    :root {
+        --rail: 100%;
+    }
+
+    /* スマホでは全幅 */
+}
+
+/* ===== コメント表示 ===== */
+.cmt-section {
+    margin-top: 16px;
+}
+
+.cmt-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+
+.cmt-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.cmt-name {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.cmt-time {
+    margin-left: auto;
+    color: #999;
+    font-size: 12px;
+}
+
+.cmt-bubble {
+    background: #f2f2f2;
+    border-radius: 8px;
+    padding: 10px 12px;
+    /* 左にアイコン分の字下げ（= 画像幅28 + ギャップ10） */
+    margin-left: 38px;
+}
+
+.cmt-text {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.cmt-empty {
+    color: #666;
+    font-size: 14px;
+}
+
+/* ===== 右カラムの共通レール幅 ===== */
+.rail {
+    --rail-w: 420px;
+}
+
+/* 好きな初期値。レスポンシブ時は下のJSが上書き */
+.rail .rail-w {
+    width: var(--rail-w);
+}
+
+/* 共通CTA（購入ボタン＆送信ボタンを同一フォームに） */
+.btn-cta {
+    display: block;
+    width: 100%;
+    /* rail-w の中でいっぱいに */
+    height: 44px;
+    border: 0;
+    border-radius: 8px;
+    background: #ff6f6f;
+    color: #fff;
+    font-weight: 700;
+    text-align: center;
+    line-height: 44px;
+    cursor: pointer;
+}
+
+.btn-cta:hover {
+    opacity: .92;
+}
+
+/* コメント表示（右端を購入ボタンにそろえる） */
+.cmt-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 12px;
+}
+
+.cmt-name {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.cmt-bubble {
+    background: #f2f2f2;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-left: 0px;
+    width: var(--rail-w);
+    /* ←①「購入ボタン」と同じ右端 */
+}
+
+.cmt-text {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* 入力フォーム（②幅合わせ & ③ボタンは .btn-cta で共通） */
+.cmt-form {
+    display: grid;
+    gap: 10px;
+}
+
+.cmt-textarea {
+    width: 100%;
+    /* ←②「購入ボタン」と同幅 */
+    resize: vertical;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    background: #fff;
+}
+
+.cmt-form--guest .cmt-textarea {
+    background: #fafafa;
+    cursor: pointer;
+}
+
+/* ===== 右カラムの行間＆縦の余白を広げる ===== */
+.rail {
+    --rail-w: min(100%, 420px);
+    /* 既存の幅変数。そのままでOK */
+    --rail-line: 2.5;
+    /* 行間（1.6〜1.9あたりで調整） */
+    --rail-gap: 14px;
+    /* セクション間の余白（12〜20で調整） */
+}
+
+/* 右側の情報ブロック全体に適用 */
+.item-detail__info {
+    display: grid;
+    gap: var(--rail-gap);
+    /* 見出し・ボタン・説明などの間隔 */
+    line-height: var(--rail-line);
+    /* 文中の行間 */
+}
+
+/* テキスト要素の行間も合わせる */
+.item-detail__info p,
+.item-detail__info li,
+.item-detail__info span,
+.item-detail__info time {
+    line-height: var(--rail-line);
+}
+
+.cmt-list {
+    gap: 14px;
+}
+
+.cmt-text {
+    line-height: var(--rail-line);
+}
+
+.cmt-textarea {
+    line-height: 1.8;
+}
+
+/* 入力欄内の行間 */
+
+/* ===== 右カラムの行間＆縦の余白を確実に効かせる（上書き用） ===== */
+.item-detail__info.rail {
+    display: grid;
+    gap: var(--rail-gap);
+    line-height: var(--rail-line) !important;
+    /* ← ここで右カラム基準の行間を強制 */
+}
+
+/* テキスト系要素は右カラムの行間を継承させる */
+.item-detail__info.rail p,
+.item-detail__info.rail li,
+.item-detail__info.rail span,
+.item-detail__info.rail time,
+.item-detail__info.rail .cmt-text,
+.item-detail__info.rail .item-detail__brand,
+.item-detail__info.rail .item-detail__price {
+    line-height: inherit !important;
+}
+
+/* コメントブロックの間隔も少し広げる（お好みで） */
+.cmt-list {
+    gap: calc(var(--rail-gap) * 0.9);
+}
+
+
+.like-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+.like-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* いいね済みは塗りつぶす */
+.like-btn.is-liked svg path {
+    fill: currentColor;
+}
+
+/* 右カラムの共通幅（購入ボタン/コメント欄/コメント吹き出しを揃える） */
+.item-detail__right {
+    --rail-w: min(100%, 360px);
+}
+
+/* 好みで 340〜420px くらい */
+.panel-rail,
+.cmt-form {
+    width: var(--rail-w);
+}
+
+.cmt-textarea {
+    width: 100%;
+    resize: vertical;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    line-height: 1.7;
+    background: #fff;
+}
+
+/* ボタンは購入ボタンと同じ“横いっぱい”に */
+.btn-cta {
+    display: block;
+    width: 100%;
+    height: 44px;
+    border: 0;
+    border-radius: 8px;
+    background: #ff6f6f;
+    color: #fff;
+    font-weight: 700;
+    text-align: center;
+    line-height: 44px;
+    cursor: pointer;
+}
+
+.char-count {
+    display: none;
+}
+
+.comments {
+    margin-top: 16px;
+    display: grid;
+    gap: 14px;
+}
+
+.comment {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.comment .text {
+    margin: 6px 0 0;
+    padding: 10px 12px;
+    background: #f7f7f7;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+
+.cmt-name {
+    font-size: 0.75rem;
+    margin-top: 4px;
+    color: #555;
+}
+
+.avatar-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* === Avatar size fix (最後に置く) === */
+.cmt-meta .cmt-avatar {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.avatar-img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.cmt-meta img,
+.comment .avatar-img,
+.comment .cmt-avatar,
+.cmt-avatar,
+.avatar-img {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    /* ここ重要：丸の外を隠す */
+    background: #D9D9D9;
+    /* 置き背景：任意 */
+    display: inline-block;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* 画像を枠いっぱいに切り出す */
+    display: block;
+    background: transparent !important;
+    /* imgに背景が付いてたら無効化 */
+}

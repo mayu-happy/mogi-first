@@ -1,0 +1,192 @@
+/* ===== Base ===== */
+body {
+    background: #fff;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans JP", Arial, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}
+
+/* （任意）上部の黒バー */
+.logo-bar {
+    background: #000;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+}
+
+/* ===== Login ===== */
+.login-container {
+    width: 100%;
+    max-width: 440px;
+    /* 見本の幅感 */
+    margin: 56px auto 0;
+    /* 上に余白を多め */
+    padding: 0 16px;
+    /* 端末が狭いときの左右余白 */
+}
+
+.login-container h2 {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+    margin: 8px 0 24px;
+}
+
+/* ラベルと入力 */
+.login-container label {
+    display: block;
+    margin: 12px 0 6px;
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+}
+
+.login-container input[type="email"],
+.login-container input[type="password"] {
+    width: 100%;
+    height: 38px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    border: 1px solid #d9d9d9;
+    /* 細いグレー枠 */
+    border-radius: 4px;
+    background: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+    margin-bottom: 18px;
+    /* ラベル-入力-次のラベルの間隔 */
+}
+
+.login-container input[type="email"]:focus,
+.login-container input[type="password"]:focus {
+    border-color: #999;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, .05);
+}
+
+/* 送信ボタン（見本のコーラル色） */
+.login-container .btn.btn-danger,
+.login-container button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    background: #ff5b5b !important;
+    /* Bootstrap上書き */
+    border: 1px solid #ff5b5b !important;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background .15s ease, border-color .15s ease, transform .02s ease;
+    margin-top: 6px;
+}
+
+.login-container .btn.btn-danger:hover,
+.login-container button[type="submit"]:hover {
+    background: #e04a4a !important;
+    border-color: #e04a4a !important;
+}
+
+.login-container .btn.btn-danger:active,
+.login-container button[type="submit"]:active {
+    transform: translateY(1px);
+}
+
+/* 下部リンク（小さめ・青） */
+.login-container .mt-3 {
+    text-align: center;
+    margin-top: 14px !important;
+}
+
+.login-container .mt-3 a {
+    font-size: 12px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.login-container .mt-3 a:hover {
+    text-decoration: underline;
+}
+
+/* 細かいレスポンシブ調整 */
+@media (max-width: 360px) {
+    .login-container {
+        margin-top: 40px;
+    }
+}
+
+.error-message {
+    color: red !important;
+    background-color: #ffecec;
+    padding: 4px;
+    border-left: 4px solid red;
+}
+
+/* ============ Tablet: 768–850px ============ */
+@media (min-width:768px) and (max-width:850px) {
+    .login-container {
+        width: min(86vw, 460px);
+        margin-top: 64px;
+        padding: 28px;
+    }
+
+    .login-container h2 {
+        font-size: 24px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+        height: 48px;
+        font-size: 16px;
+    }
+
+    button[type="submit"] {
+        height: 50px;
+        font-size: 16px;
+    }
+}
+
+/* ============ PC: 1400–1540px ============ */
+@media (min-width:1400px) and (max-width:1540px) {
+    .login-container {
+        width: 520px;
+        padding: 32px;
+    }
+
+    .login-container h2 {
+        font-size: 26px;
+    }
+
+    label {
+        font-size: 15px;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+        height: 50px;
+        font-size: 16px;
+    }
+
+    button[type="submit"] {
+        height: 52px;
+        font-size: 16px;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+}

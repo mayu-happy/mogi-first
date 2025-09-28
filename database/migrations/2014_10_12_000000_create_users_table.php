@@ -22,7 +22,9 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
+        
     }
+    
 
     /**
      * Reverse the migrations.
@@ -31,6 +33,10 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['name', 'email', 'password']);
+        });
     }
+    
 }
+
