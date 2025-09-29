@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+
+
+Log::info('Loaded database config: forcing sqlite');
 
 return [
 
@@ -15,8 +19,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
-
+    'default' => 'sqlite',
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -37,10 +40,8 @@ return [
 
         'sqlite' => [
             'driver' => 'sqlite',
-            'url' => env('DATABASE_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'database' => database_path('testing.sqlite'),
             'prefix' => '',
-            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
         'mysql' => [
