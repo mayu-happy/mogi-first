@@ -1,6 +1,5 @@
-@extends('layouts.app')
-
+@extends('layouts.base')
 @section('content')
-<h1>ご登録ありがとうございました！</h1>
-<p>登録が完了しました。</p>
+  <h1>登録ありがとうございます！</h1>
+  <p><a href="{{ route('home') }}">トップへ戻る</a></p>
 @endsection
