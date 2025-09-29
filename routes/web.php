@@ -16,14 +16,7 @@ use App\Http\Controllers\{
     MyPageController
 };
 
-Route::get('/test-home', fn() => response('ok', 200));
-Route::get('/', function () {
-    if (app()->runningUnitTests() || app()->environment('testing')) {
-        return response('ok', 200);
-    }
-    return app()->call([ItemController::class, 'index']);
-})->name('home');
-
+Route::get('/', [ItemController::class, 'index'])->name('home');
 /* Public */
 
 Route::get('/items/{item}', [ItemController::class, 'show'])

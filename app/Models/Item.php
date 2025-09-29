@@ -10,11 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class Item extends Model
 {
     use HasFactory;
 
+    // 必要なら guard を緩めるなら: protected $guarded = [];
     protected $fillable = [
         'name',
         'price',
@@ -24,7 +26,7 @@ class Item extends Model
         'condition',
         'user_id',
         'category_id',
-        'img_url'
+        'img_url',
     ];
 
     public function user(): BelongsTo
@@ -52,6 +54,11 @@ class Item extends Model
         return $this->hasOne(Purchase::class);
     }
 
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
     public function likedBy(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'likes', 'item_id', 'user_id')
@@ -68,6 +75,11 @@ class Item extends Model
         return $this->likedBy();
     }
 
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'category_item', 'item_id', 'category_id');
+    }
+
     public function scopeExceptOwner(Builder $q, ?int $userId = null): Builder
     {
         $userId ??= Auth::id();
@@ -79,18 +91,10 @@ class Item extends Model
         });
     }
 
-    public function categories()
-    {
-        return $this->belongsToMany(\App\Models\Category::class, 'category_item', 'item_id', 'category_id');
-    }
-    
+    // 画像URLアクセサ：http(s) 始まりならそのまま、相対なら asset() を付与
     public function getThumbUrlAttribute(): string
     {
-        return $this->img_url ? asset($this->img_url) : asset('images/noimage.png');
-    }
-
-    public function purchases()
-    {
-        return $this->hasMany(Purchase::class);
+        $url = $this->img_url ?: 'images/noimage.png';
+        return Str::startsWith($url, ['http://', 'https://']) ? $url : asset($url);
     }
 }

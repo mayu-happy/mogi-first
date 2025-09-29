@@ -4,8 +4,6 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
 
-Log::info('Loaded database config: forcing sqlite');
-
 return [
 
     /*
@@ -19,7 +17,7 @@ return [
     |
     */
 
-    'default' => 'sqlite',
+    'default' => env('DB_CONNECTION', 'mysql'),
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -40,7 +38,7 @@ return [
 
         'sqlite' => [
             'driver' => 'sqlite',
-            'database' => database_path('testing.sqlite'),
+            'database' => env('DB_DATABASE', database_path('database.sqlite')),
             'prefix' => '',
         ],
 
