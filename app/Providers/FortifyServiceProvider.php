@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\RegisterResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -20,7 +21,15 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-
+        // 登録完了後のリダイレクト先を強制
+        $this->app->singleton(RegisterResponse::class, function () {
+            return new class implements RegisterResponse {
+                public function toResponse($request)
+                {
+                    return redirect()->route('mypage.profile.edit');
+                }
+            };
+        });
     }
     /**
      * Bootstrap any application services.
@@ -28,21 +37,23 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // ▼ ビュー割り当て
-        \Laravel\Fortify\Fortify::loginView(fn() => view('auth.login'));
-        \Laravel\Fortify\Fortify::registerView(fn() => view('auth.register'));
+        Fortify::loginView(fn() => view('auth.login'));
+        Fortify::registerView(fn() => view('auth.register'));
 
-        // ▼ アクションの割り当て
-        \Laravel\Fortify\Fortify::createUsersUsing(\App\Actions\Fortify\CreateNewUser::class);
-        \Laravel\Fortify\Fortify::updateUserProfileInformationUsing(\App\Actions\Fortify\UpdateUserProfileInformation::class);
-        \Laravel\Fortify\Fortify::updateUserPasswordsUsing(\App\Actions\Fortify\UpdateUserPassword::class);
-        \Laravel\Fortify\Fortify::resetUserPasswordsUsing(\App\Actions\Fortify\ResetUserPassword::class);
-        
-        // ▼ RateLimiter
+        // ▼ アクション割り当て
+        Fortify::createUsersUsing(CreateNewUser::class);
+        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+        Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
+        Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
+        // ▼ レート制限
         RateLimiter::for('login', function (Request $request) {
-            $key = Str::transliterate(Str::lower($request->input(\Laravel\Fortify\Fortify::username())) . '|' . $request->ip());
+            $key = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
             return Limit::perMinute(5)->by($key);
         });
-
         RateLimiter::for('two-factor', fn(Request $r) => Limit::perMinute(5)->by($r->session()->get('login.id')));
+
+        // ▼ 登録完了後のリダイレクト（テスト期待どおり）
+        \Laravel\Fortify\Fortify::redirects('register', '/mypage/profile/edit');        // もしくは文字列でもOK: Fortify::redirects('register', '/mypage/profile/edit');
     }
 }

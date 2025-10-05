@@ -146,9 +146,9 @@ return [
 
     'features' => [
         Laravel\Fortify\Features::registration(),
-        // Laravel\Fortify\Features::resetPasswords(),
+        Laravel\Fortify\Features::resetPasswords(),
         // Laravel\Fortify\Features::emailVerification(), // 必要になったらON
-        // Laravel\Fortify\Features::updateProfileInformation(), // 既存実装を使うならOFF
+        Laravel\Fortify\Features::updateProfileInformation(), // 既存実装を使うならOFF
         // Laravel\Fortify\Features::updatePasswords(),          // 同上
         // Laravel\Fortify\Features::twoFactorAuthentication(),  // 後で
     ],

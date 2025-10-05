@@ -48,6 +48,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/sell', [SellController::class, 'store'])->name('sell.store');
     Route::post('/sell/images/upload', [SellController::class, 'uploadImages'])
         ->name('sell.images.upload');
+    Route::get('/mypage/profile/edit', [ProfileController::class, 'edit'])
+        ->name('mypage.profile.edit');
 
     // ===== マイページ =====
     Route::prefix('mypage')->name('mypage.')->group(function () {
