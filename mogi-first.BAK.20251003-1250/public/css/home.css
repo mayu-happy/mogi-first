@@ -1,0 +1,175 @@
+/* ===== ページ幅 ===== */
+.list-container {
+    width: min(1100px, 100% - 48px);
+    margin: 24px auto 80px;
+}
+
+/* ===== タブ（.tab-bar を使用） ===== */
+.tab-bar {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    border-bottom: 1px solid #dcdcdc;
+    margin: 12px 0 24px;
+}
+
+.tab-bar a {
+    display: inline-block;
+    padding: 10px 4px 12px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.tab-bar a.active {
+    color: #ff5f5f;
+    position: relative;
+}
+
+.tab-bar a.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 3px;
+    background: #ff5f5f;
+    border-radius: 3px 3px 0 0;
+}
+
+/* ===== グリッド ===== */
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* PC: 4列 */
+    gap: 40px 36px;
+    /* 行・列間隔 */
+}
+
+@media (max-width: 1024px) {
+    .items-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 680px) {
+    .items-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ===== カード ===== */
+.item-card {
+    width: 100%;
+}
+
+/* サムネ（正方形に収めてトリミング） */
+.item-card .thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background: #e9e9e9;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.item-card .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* SOLD バッジ（左上の小ラベル） */
+.item-card .sold {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, .55);
+    color: #fff;
+    font-weight: 800;
+    letter-spacing: .02em;
+    font-size: 14px;
+}
+
+/* 商品名 */
+.item-card .name {
+    margin: 10px 2px 0;
+    font-size: 14px;
+    color: #222;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 事故対策（他のCSSが img を壊すのを防ぐ） */
+.items-grid img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* === タブの二重線を解消：赤い下線を消してベースラインだけ残す === */
+.tab-bar {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* 既存どおりの一本線 */
+.tab-bar a.active::after {
+    content: none !important;
+}
+
+/* 赤い下線を無効化 */
+
+/* === 余計なグリッド線を解消：カードの枠線を外す === */
+.item-card .thumb {
+    border: none !important;
+    /* 1pxの薄い枠を消す */
+    background: #eee;
+    /* お好みで #e9e9e9 → 少し明るめ */
+    border-radius: 10px;
+    /* 角丸は残す（不要なら削除） */
+    box-shadow: none;
+    /* 影があれば消す */
+}
+
+/* 万一、a要素やカード自体に枠が当たっていたら外す */
+.item-card {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* タブの赤い下線や二重線を出さない */
+.tab-bar {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.tab-bar a.active::after {
+    content: none !important;
+}
+
+/* タブ直後に置かれた hr / 区切り要素は非表示 */
+.tab-bar+hr,
+.tab-bar+.divider,
+.tab-bar+.hr {
+    display: none !important;
+}
+
+/* カード全体をリンクに（クリック領域を広く） */
+a.item-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* ホバー時の演出は控えめに */
+a.item-card .thumb {
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+
+a.item-card:hover .thumb {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .06);
+}

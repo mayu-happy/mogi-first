@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use App\Http\Controllers\{
     ItemController,
     RegisterController,
@@ -12,33 +10,36 @@ use App\Http\Controllers\{
     ProfileController,
     CommentController,
     LikeController,
-    MyPageController
+    MyPageController,
+    LoginController
 };
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
-// ログイン未実装なので /login → /register に誘導
-Route::get('/login', fn() => redirect()->route('register'))->name('login');
-
-// ホーム：アイテム一覧
+// Home
 Route::get('/', [ItemController::class, 'index'])->name('home');
 
-/* Public */
+// Public
 Route::get('/items', [ItemController::class, 'index'])->name('items.index');
 Route::get('/items/{item}', [ItemController::class, 'show'])
     ->whereNumber('item')
     ->name('items.show');
 
-Route::get('/register', [RegisterController::class, 'showForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'submit'])->name('register.submit');
+// 登録完了ページ（誰でも見えるでOK）
 Route::get('/thanks', fn() => view('auth.thanks'))->name('register.thanks');
-Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
 
-/* Auth required */
+// 未ログインだけ
+Route::get('/login', [LoginController::class, 'show'])
+    ->middleware('guest')->name('login');
+
+Route::post('/login', [LoginController::class, 'authenticate'])
+    ->middleware('guest')->name('login.attempt');
+
+Route::get('/register', [RegisterController::class, 'showForm'])
+    ->middleware('guest')->name('register');
+
+Route::post('/register', [RegisterController::class, 'submit'])
+    ->middleware('guest')->name('register.submit');
+
+// ログイン済みだけ
 Route::middleware('auth')->group(function () {
     // コメント・いいね・購入
     Route::post('/items/{item}/comments', [CommentController::class, 'store'])->name('items.comments.store');
@@ -50,6 +51,7 @@ Route::middleware('auth')->group(function () {
     // プロフィール
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
 
     // マイページ
     Route::prefix('mypage')->name('mypage.')->group(function () {
@@ -70,15 +72,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/items', [ItemController::class, 'store'])->name('items.store');
     Route::post('/sell', [SellController::class, 'store'])->name('sell.store');
 
-    // ログアウト（ノーJS用にPOST）
-    Route::post('/logout', function (Request $request) {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('home');
-    })->name('logout');
-
-    // 住所
-    Route::get('/address/edit', [AddressController::class, 'edit'])->name('address.edit');
-    Route::put('/address', [AddressController::class, 'update'])->name('address.update');
+    // ログアウト
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });

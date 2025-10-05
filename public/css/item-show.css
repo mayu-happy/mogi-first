@@ -1,0 +1,210 @@
+.card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-link .thumb {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: pointer;
+}
+
+.card-link:hover .thumb {
+    opacity: .95;
+}
+
+.card-clickable {
+    position: relative;
+}
+
+.stretched-link {
+    position: absolute;
+    inset: 0;
+    /* 上下左右0で全面リンク */
+    z-index: 1;
+    text-indent: -9999px;
+}
+
+.card-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-link .card-img-top {
+    cursor: pointer;
+}
+
+.card-link:hover .card-img-top {
+    opacity: .9;
+}
+
+/* item-show.css の末尾に追加（Bootstrapより後に読み込む） */
+.item-detail__image,
+.item-detail__image img {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: 0 !important;
+}
+
+.item-detail__image {
+    padding: 0 !important;
+}
+
+.item-detail__image img {
+    border-radius: 0 !important;
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.img-thumbnail {
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* レイアウト */
+.product {
+    display: grid;
+    grid-template-columns: minmax(320px, 640px) 1fr;
+    gap: 32px;
+    width: min(1100px, 100% - 48px);
+    margin: 24px auto 64px;
+}
+
+.product__media {
+    margin: 0;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+.product__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* タイポ・余白 */
+.product__title {
+    margin: 0 0 6px;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.product__brand {
+    color: #666;
+    margin-bottom: 8px;
+}
+
+.product__price {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.muted {
+    color: #888;
+}
+
+/* セクション */
+.product__section {
+    margin: 18px 0;
+}
+
+.product__kv {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px 16px;
+    margin: 0;
+}
+
+.badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    background: #eee;
+    border-radius: 999px;
+    padding: 2px 10px;
+    font-size: 12px;
+}
+
+/* chips */
+.chips {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.chip {
+    font-size: 14px;
+}
+
+/* ボタン（絶対に見えるよう最低限セット） */
+.btn {
+    display: inline-block;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn--primary {
+    background: #ee5a5a;
+    color: #fff;
+    font-weight: 700;
+}
+
+.btn--primary:hover {
+    opacity: .9;
+}
+
+/* コメント */
+.comments {
+    display: grid;
+    gap: 14px;
+}
+
+.comment {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 10px;
+}
+
+.comment__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #ddd;
+}
+
+.comment__name {
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+/* フォーム */
+.form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    resize: vertical;
+}
+
+.form .btn {
+    margin-top: 10px;
+}
