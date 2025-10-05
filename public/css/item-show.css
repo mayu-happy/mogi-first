@@ -208,3 +208,385 @@
 .form .btn {
     margin-top: 10px;
 }
+
+.btn--disabled {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    background: #bbb;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+    cursor: not-allowed;
+    pointer-events: none;
+    /* ← クリック不可 */
+}
+
+/* 一覧ページ専用 */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+.tile {
+    list-style: none;
+    position: relative;
+}
+
+.tile__link {
+    display: block;
+}
+
+.tile__img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    /* 画像比率を固定 */
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.tile__name {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* SOLD（中央・シンプル） */
+.sold-badge {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: .08em;
+    pointer-events: none;
+}
+
+.sold-badge::before {
+    content: "SOLD";
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(230, 101, 101, .92);
+}
+
+/* クリック不可にしておく（念のため） */
+a.tile__link[aria-disabled="true"] {
+    pointer-events: none;
+    cursor: default;
+    opacity: .6;
+}
+
+/* タブとグリッドの間・段間のマージンを広げる */
+.tabs {
+    display: flex;
+    gap: 16px;
+    margin: 12px 0 18px;
+}
+
+.grid {
+    display: grid;
+    gap: 18px;
+}
+
+/* デフォルト列数（中～大画面） */
+.grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+/* PC（1400–1540px）: 6列に拡張して密度を上げる */
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .tabs {
+        margin-bottom: 20px;
+    }
+}
+
+/* タブレット（768–850px）: 3列に落として見やすく */
+@media (min-width: 768px) and (max-width: 850px) {
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .tabs {
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+}
+
+/* さらに狭い画面保険（任意）：2列 */
+@media (max-width: 600px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+}
+
+/* SOLD バッジ（中央・シンプル） */
+.tile__link {
+    position: relative;
+    display: block;
+}
+
+.sold-badge {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    letter-spacing: .06em;
+    font-size: 14px;
+    color: #fff;
+    background: rgba(0, 0, 0, .35);
+    content: "SOLD";
+}
+
+/* 2カラム→タブレットで1カラム */
+.product {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 24px;
+    align-items: start;
+}
+
+/* PC（1400–1540px）: 右カラムを少し広げる */
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .product {
+        grid-template-columns: 1fr 460px;
+        gap: 26px;
+    }
+}
+
+/* タブレット（768–850px）: 1カラムにスタック */
+@media (min-width: 768px) and (max-width: 850px) {
+    .product {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .product__media {
+        order: 0;
+    }
+
+    .product aside {
+        order: 1;
+    }
+}
+
+/* 画像がはみ出さないように */
+.product__img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* セクション間マージンを少し広げる */
+.product__section {
+    margin-top: 18px;
+}
+
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .product__section {
+        margin-top: 20px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 850px) {
+    .product__section {
+        margin-top: 16px;
+    }
+}
+
+/* ===== 商品詳細レイアウト ===== */
+.product {
+    display: grid;
+    grid-template-columns: 520px 1fr;
+    /* 左: 画像 / 右: 情報 */
+    gap: 28px;
+}
+
+/* 画像ブロック＆画像 */
+.product__media {
+    max-width: 520px;
+}
+
+.product__img {
+    width: 100%;
+    /* 正方形化： */
+    aspect-ratio: 1 / 1;
+    /* ブラウザ対応良好。正方形を維持 */
+    object-fit: cover;
+    /* はみ出しはトリム（全体表示なら contain に） */
+    border-radius: 8px;
+}
+
+/* 大きい画面は少しだけ広げる（任意） */
+@media (min-width: 1400px) {
+    .product {
+        grid-template-columns: 560px 1fr;
+    }
+
+    .product__media {
+        max-width: 560px;
+    }
+}
+
+/* タブレット以下は縦積み */
+@media (max-width: 1024px) {
+    .product {
+        grid-template-columns: 1fr;
+    }
+
+    .product__media {
+        max-width: 520px;
+        margin: 0 auto 20px;
+    }
+}
+
+/* 右カラムのフォーム幅を統一 */
+.product aside {
+    max-width: 420px;
+}
+
+/* ← 共通幅 */
+.form-block {
+    max-width: 420px;
+}
+
+/* どちらでもOK（併用可） */
+.form-block .input,
+.form-block .textarea,
+.form-block .btn-primary {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* 見た目そろえる用（任意） */
+.btn-primary {
+    display: inline-block;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #e65;
+    background: #e65;
+    color: #fff;
+    text-align: center;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge-count {
+    display: inline-block;
+    min-width: 22px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: #eee;
+    color: #555;
+    font-size: 12px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+/* ===== 右カラムのレイアウト幅を統一 ===== */
+.product {
+    /* 左：画像 / 右：本文（右は固定幅） */
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) 460px;
+    gap: 24px;
+}
+
+.product aside {
+    max-width: 460px;
+}
+
+/* ボタンやテキストエリアを載せる共通ブロック */
+.form-block {
+    max-width: 460px;
+}
+
+/* ===== 入力欄とボタンの幅をそろえる ===== */
+.textarea {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* a でも button でも共通で 100% 幅 */
+.btn {
+    display: block;
+    /* ← インライン要素(a)でも幅が効くように */
+    width: 100%;
+    /* ← ここがキモ：コンテナ(form-block)いっぱい */
+    padding: 12px;
+    border-radius: 6px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* 色だけバリエーション */
+.btn--primary {
+    background: #e65;
+    border: 1px solid #e65;
+    color: #fff;
+}
+
+.btn--disabled {
+    background: #bbb;
+    border: 1px solid #bbb;
+    color: #fff;
+    cursor: not-allowed;
+}
+
+/* コメント見出し */
+.comments__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 16px 0 8px;
+}
+
+/* (1) の部分だけ少しトーンダウン */
+.comments__count {
+    font-weight: 700;
+    font-size: 14px;
+    color: #777;
+    line-height: 1;
+}
+
+/* 既存 .chip はそのまま（枠あり） */
+.chip--plain {
+    border: none;
+    background: transparent;
+    padding: 0;
+    /* タグの内側余白もナシ */
+    border-radius: 0;
+    box-shadow: none;
+    filter: none;
+    color: #666;
+}
+
+.chip--plain:hover {
+    filter: none;
+}
+
+.chip--plain:focus {
+    outline: none;
+}

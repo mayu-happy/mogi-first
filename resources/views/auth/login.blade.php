@@ -1,32 +1,32 @@
 @extends('layouts.app')
-
 @section('title', 'ログイン')
 
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/login.css') }}?v=3">
+@endpush
+
 @section('content')
+<div class="login">
+  <div class="login-card">
+    <h1 class="login-title">ログイン</h1>
 
-<link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <form method="POST" action="{{ url('/login') }}" novalidate>
+      @csrf
 
-<div class="login-container">
-  <h2>ログイン</h2>
+      <label class="login-label">メールアドレス</label>
+      <input class="login-input" type="email" name="email" value="{{ old('email') }}">
+      @error('email')<div class="error-message">{{ $message }}</div>@enderror
 
-  {{-- ログインフォーム --}}
-  <form method="POST" action="{{ route('login') }}" novalidate>
-    @csrf
+      <label class="login-label">パスワード</label>
+      <input class="login-input" type="password" name="password">
+      @error('password')<div class="error-message">{{ $message }}</div>@enderror
 
-    <label>メールアドレス</label>
-    <input type="email" name="email" value="{{ old('email') }}">
-    @error('email')<div class="error-message">{{ $message }}</div>@enderror
+      <button class="login-btn" type="submit">ログインする</button>
+    </form>
 
-    <label>パスワード</label>
-    <input type="password" name="password">
-    @error('password')<div class="error-message">{{ $message }}</div>@enderror
-
-    <button type="submit">ログイン</button>
-  </form>
-
-  <div class="mt-3">
-    <a href="{{ route('register') }}">会員登録はこちら</a>
+    <p class="login-foot">
+      <a href="{{ route('register') }}">会員登録はこちら</a>
+    </p>
   </div>
 </div>
-
 @endsection

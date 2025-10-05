@@ -12,11 +12,12 @@ class ItemController extends Controller
         $kw  = trim((string) $request->query('q', ''));
 
         $query = \App\Models\Item::query()
+            ->with(['user'])               // 必要な関連だけ
+            ->withExists(['purchase'])
             ->with(['user'])
             ->withCount(['comments', 'likedBy'])
             ->latest('id');
 
-        // ← name だけで部分一致
         if ($kw !== '') {
             $query->where('name', 'like', "%{$kw}%");
         }

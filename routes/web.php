@@ -3,15 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\{
     ItemController,
-    RegisterController,
     PurchaseController,
     AddressController,
     SellController,
     ProfileController,
     CommentController,
     LikeController,
-    MyPageController,
-    LoginController
+    MyPageController
 };
 
 // Home
@@ -23,55 +21,54 @@ Route::get('/items/{item}', [ItemController::class, 'show'])
     ->whereNumber('item')
     ->name('items.show');
 
-// 登録完了ページ（誰でも見えるでOK）
-Route::get('/thanks', fn() => view('auth.thanks'))->name('register.thanks');
-
-// 未ログインだけ
-Route::get('/login', [LoginController::class, 'show'])
-    ->middleware('guest')->name('login');
-
-Route::post('/login', [LoginController::class, 'authenticate'])
-    ->middleware('guest')->name('login.attempt');
-
-Route::get('/register', [RegisterController::class, 'showForm'])
-    ->middleware('guest')->name('register');
-
-Route::post('/register', [RegisterController::class, 'submit'])
-    ->middleware('guest')->name('register.submit');
-
 // ログイン済みだけ
 Route::middleware('auth')->group(function () {
-    // コメント・いいね・購入
-    Route::post('/items/{item}/comments', [CommentController::class, 'store'])->name('items.comments.store');
-    Route::post('/items/{item}/likes/toggle', [LikeController::class, 'toggle'])->name('items.likes.toggle');
-    Route::get('/items/{item}/purchase', [PurchaseController::class, 'create'])->name('purchase.create');
-    Route::post('/items/{item}/update-payment', [PurchaseController::class, 'updatePayment'])->name('purchase.updatePayment');
-    Route::post('/purchase/{item}', [PurchaseController::class, 'store'])->name('purchase.store');
 
-    // プロフィール
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    // ===== コメント・いいね =====
+    Route::post('/items/{item}/comments', [CommentController::class, 'store'])
+        ->name('items.comments.store');
+    Route::post('/items/{item}/likes/toggle', [LikeController::class, 'toggle'])
+        ->name('items.likes.toggle');
 
-    // マイページ
-    Route::prefix('mypage')->name('mypage.')->group(function () {
-        Route::get('/', [MyPageController::class, 'sell'])->name('index');
-        Route::get('/sell', [MyPageController::class, 'sell'])->name('sell');
-        Route::get('/buy', [MyPageController::class, 'buy'])->name('buy');
-        Route::get('/likes', [MyPageController::class, 'likes'])->name('likes');
-        Route::get('/address', [AddressController::class, 'create'])->name('address');
+    // ===== 購入フロー =====
+    Route::get('/items/{item}/purchase', [PurchaseController::class, 'create'])
+        ->name('purchase.create');
+    Route::get('/items/{item}/purchase/payment',  [PurchaseController::class, 'editPayment'])
+        ->name('purchase.payment.edit');
+    Route::put('/items/{item}/purchase/payment',  [PurchaseController::class, 'updatePayment'])
+        ->name('purchase.payment.update');
+    Route::post('/items/{item}/purchase', [PurchaseController::class, 'store'])
+        ->name('purchase.store');
+    // ★ 購入用の配送先編集（プロフィールとは別）
+    Route::get('/items/{item}/purchase/address',  [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
+    Route::put('/items/{item}/purchase/address',  [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
 
-        Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
-        Route::get('/profile/edit', [MyPageController::class, 'editProfile'])->name('profile.edit');
-        Route::put('/profile', [MyPageController::class, 'updateProfile'])->name('profile.update');
-        Route::post('/profile/images', [ProfileController::class, 'updateAvatar'])->name('profile.images.update');
-    });
-
-    // 出品
+    // ===== 出品 =====
     Route::get('/sell/create', [SellController::class, 'create'])->name('sell.create');
-    Route::post('/items', [ItemController::class, 'store'])->name('items.store');
     Route::post('/sell', [SellController::class, 'store'])->name('sell.store');
+    Route::post('/sell/images/upload', [SellController::class, 'uploadImages'])
+        ->name('sell.images.upload');
 
-    // ログアウト
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    // ===== マイページ =====
+    Route::prefix('mypage')->name('mypage.')->group(function () {
+
+        // デフォルトはプロフィール画面へ
+        Route::get('/', fn() => redirect()->route('mypage.profile'))->name('index');
+
+        // プロフィール（表示は MyPageController@profile に一本化）
+        Route::get('/profile', [MyPageController::class, 'profile'])->name('profile');
+
+        // タブはクエリで切り替え（/mypage/profile?tab=sell 等）
+        Route::get('/sell',  fn() => redirect()->route('mypage.profile', ['tab' => 'sell']))->name('sell');
+        Route::get('/buy',   fn() => redirect()->route('mypage.profile', ['tab' => 'buy']))->name('buy');
+        Route::get('/likes', fn() => redirect()->route('mypage.profile', ['tab' => 'likes']))->name('likes');
+
+        // プロフィール編集・更新・アイコン更新（編集系は ProfileController に一本化）
+        Route::get('/profile/edit',  [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile',       [ProfileController::class, 'update'])->name('profile.update');
+        Route::post('/profile/images', [ProfileController::class, 'updateAvatar'])->name('profile.images.update');
+        Route::post('/profile/avatar', [\App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+        // 住所（必要なら）
+        Route::get('/address', [AddressController::class, 'create'])->name('address');
+    });
 });

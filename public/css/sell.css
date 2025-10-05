@@ -1,0 +1,307 @@
+/* ===== レイアウト & タイトル（①中央寄せ） ===== */
+.sell-container {
+    width: min(800px, 100% - 48px);
+    margin: 32px auto 80px;
+    font-size: 14px;
+}
+
+.sell-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 6px 0 18px;
+}
+
+/* ① */
+
+/* ===== セクション ===== */
+.block {
+    margin: 24px 0;
+}
+
+.block__title {
+    font-weight: 700;
+    margin: 0 0 10px;
+}
+
+/* ===== 画像アップロード（②点線枠＋CTA中央 / ④送信は枠外で控えめ） ===== */
+.dz-form {
+    width: 100%;
+}
+
+.dropzone {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 180px;
+    border: 2px dashed #e5e7eb;
+    /* ② 点線 */
+    border-radius: 10px;
+    background: #fff;
+    margin: 0 0 10px;
+}
+
+.dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    /* ラベル全体がクリック可能 */
+}
+
+.dz-cta {
+    padding: 8px 14px;
+    border-radius: 6px;
+    background: #ff6f6f;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    /* 枠内中央のボタン */
+}
+
+.dz-submit {
+    /* ④ 枠外・控えめ */
+    display: none;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #f7f8f9;
+    color: #555;
+    cursor: pointer;
+}
+
+/* ファイルが選ばれたら送信ボタンを表示（ノンJS） */
+.dz-form:has(input[type="file"]:valid) .dz-submit {
+    display: inline-block;
+}
+
+/* ===== フォーム共通 ===== */
+.field {
+    margin: 14px 0;
+}
+
+.field__label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.input,
+.textarea,
+.select {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.textarea {
+    height: auto;
+    padding: 10px 12px;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+    border-color: #ff6f6f;
+    box-shadow: 0 0 0 3px rgba(255, 111, 111, .15);
+}
+
+/* ===== 販売価格の¥（③ 左寄せ＆縦中央。重複を防ぐ） ===== */
+.yen-input {
+    position: relative;
+}
+
+.yen {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #777;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.yen-input .input {
+    padding-left: 28px;
+}
+
+/* ¥の分だけ内側余白を追加 */
+
+/* ===== カテゴリチップ（見本トーン） ===== */
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.chip__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid #ffd0d0;
+    color: #e65;
+    background: #fff;
+    user-select: none;
+    cursor: pointer;
+}
+
+.chip__input:checked+.chip {
+    background: #fff5f5;
+}
+
+/* ===== 送信ボタン ===== */
+.actions {
+    margin-top: 18px;
+}
+
+.btn-primary {
+    display: block;
+    width: 100%;
+    height: 44px;
+    border-radius: 8px;
+    font-weight: 700;
+    background: #ff6f6f;
+    color: #fff;
+    border: 1px solid transparent;
+}
+
+.btn-primary:hover {
+    filter: brightness(.98);
+}
+
+/* エラーメッセージ等 */
+.error {
+    color: #d33;
+    margin-top: 6px;
+}
+
+.status {
+    color: #0a7;
+    margin-top: 6px;
+}
+
+/* プレビュー格子 */
+.thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+    padding: 0;
+    list-style: none;
+}
+
+.thumb {
+    width: 96px;
+    height: 96px;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fafafa;
+}
+
+.thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* --- dropzone 基本 --- */
+.dropzone {
+    position: relative;
+    display: block;
+    min-height: 180px;
+    border: 2px dashed #e5e7eb;
+    border-radius: 10px;
+    background: #fff;
+    padding: 12px;
+    /* 内側に余白（プレビューのため） */
+    margin: 0 0 10px;
+}
+
+/* ファイル入力は全面クリック可能に（視覚的に非表示） */
+.dropzone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* 中央CTA。画像が1枚でもある時は非表示 */
+.dz-cta {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 8px 14px;
+    border-radius: 6px;
+    background: #ff6f6f;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.dropzone:has(.thumbs--in .thumb) .dz-cta {
+    display: none;
+}
+
+/* --- 枠内サムネ格子（クリック透過） --- */
+.thumbs--in {
+    position: absolute;
+    inset: 12px;
+    /* 枠内に均等余白 */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-content: flex-start;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+    /* ← プレビュー上でもdropzoneクリック可 */
+}
+
+.thumbs--in .thumb {
+    width: 96px;
+    height: 96px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    overflow: hidden;
+}
+
+.thumbs--in .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 枠外の送信ボタンは控えめ。選択時のみ表示（既存の通り） */
+.dz-submit {
+    display: none;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background: #f7f8f9;
+    color: #555;
+    cursor: pointer;
+}
+
+.dz-form:has(input[type="file"]:valid) .dz-submit {
+    display: inline-block;
+}

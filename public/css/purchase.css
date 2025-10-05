@@ -1,0 +1,263 @@
+/* ============ layout ============ */
+.wrap {
+    width: min(980px, 100% - 48px);
+    margin: 24px auto 80px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    /* 左：本文 / 右：サマリー */
+    gap: 48px;
+    align-items: start;
+}
+
+/* 罫線 */
+.line {
+    border-top: 1px solid #e5e7eb;
+    margin: 18px 0;
+    margin-top: 40px;
+}
+
+/* ============ 左側の行 ============ */
+.row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.thumb {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    background: #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+}
+
+/* 商品名（最上段だけ少し大きく） */
+.h {
+    font-weight: 700;
+    font-size: 13px;
+    margin: 0 0 6px;
+}
+
+.row:first-of-type .h {
+    font-size: 18px;
+    margin: 0 0 6px;
+}
+
+/* 価格 */
+.price {
+    font-weight: 700;
+    font-size: 18px;
+    color: #111;
+}
+
+/* ============ フォーム部品 ============ */
+.select {
+    height: 32px;
+    min-width: 200px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    padding: 0 10px;
+    background: #fff;
+}
+
+.btn {
+    appearance: none;
+    border: 1px solid #e5e7eb;
+    background: #f7f8f9;
+    color: #444;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+/* 反映ボタンをより控えめに（小型・薄色） */
+.btn.sm {
+    padding: 4px 8px;
+    /* 小さく */
+    font-size: 11px;
+    /* 小さく */
+    border-radius: 999px;
+    background: #f7f8f9;
+    color: #666;
+    border: 1px solid #e9eaec;
+}
+
+.btn.sm:hover {
+    background: #f2f3f5;
+}
+
+/* ============ 右側サマリー ============ */
+.summary {
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    background: #fff;
+    overflow: hidden;
+    min-width: 280px;
+}
+
+.summary__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.summary__row:last-of-type {
+    border-bottom: 0 !important;
+}
+
+.summary__th {
+    color: #222;
+}
+
+.summary__td {
+    font-weight: 700;
+}
+
+/* ============ 送信ボタン（見本のコーラル） ============ */
+.btn-primary {
+    display: block;
+    width: 100%;
+    height: 44px;
+    border-radius: 8px;
+    font-weight: 700;
+    border: 1px solid transparent;
+    background: #ff6f6f;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    filter: brightness(.98);
+}
+
+/* ちょい便利 */
+.mt-3 {
+    margin-top: 16px;
+}
+
+/* テキスト色・リンクの雰囲気を見本寄せ（任意） */
+.wrap a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+.wrap a:hover {
+    text-decoration: underline;
+}
+
+/* 小計カードは行だけを囲う。ボタンは外で独立 */
+.summary-col {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-width: 280px;
+    width: 320px;
+    /* wrap の右カラム幅と合わせる */
+}
+
+.summary {
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.summary__row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.summary__row:last-of-type {
+    border-bottom: 0;
+}
+
+/* カードの下にピッタリ配置される購入ボタン */
+.summary-buy {
+    margin-top: 12px;
+}
+
+.summary-buy .btn-primary {
+    width: 100%;
+    height: 44px;
+    border-radius: 8px;
+    font-weight: 700;
+    background: #ff6f6f;
+    color: #fff;
+    border: 1px solid transparent;
+}
+
+.summary-buy .btn-primary:hover {
+    filter: brightness(.98);
+}
+
+/* 親レイアウト（参考：既にあればOK） */
+.wrap {
+    width: min(980px, 100% - 48px);
+    margin: 24px auto 80px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    /* 左 / 右 */
+    gap: 48px;
+    align-items: start;
+}
+
+/* セレクト＋適用ボタンの器 */
+.payment-apply {
+    position: relative;
+    display: inline-block;
+    /* セレクトの大きさに沿わせる */
+}
+
+/* セレクトの基本（既存の .select でもOK） */
+.payment-apply .select {
+    height: 36px;
+    min-width: 240px;
+    padding: 0 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    background: #fff;
+}
+
+/* 反映ボタン：極小・控えめ・右下に固定 */
+.btn-apply {
+    position: absolute;
+    right: 0px;
+    /* ちょい外に出す。内側にしたいなら 4px などに */
+    bottom: -16px;
+    padding: 2px 6px;
+    /* 極小 */
+    font-size: 10px;
+    line-height: 1;
+    white-space: nowrap;
+    border: 1px solid #e9eaec;
+    border-radius: 999px;
+    background: #f7f8f9;
+    color: #666;
+    cursor: pointer;
+}
+
+/* ホバー/フォーカス（控えめに） */
+.btn-apply:hover {
+    background: #f2f3f5;
+}
+
+.btn-apply:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, .15);
+    border-color: #d5d7db;
+}
+
+/* モバイルでのタップ最低サイズ確保（見た目は小さくキープ） */
+@media (hover:none) {
+    .btn-apply {
+        padding: 4px 8px;
+    }
+}

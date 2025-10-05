@@ -13,6 +13,17 @@ class Item extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'brand',
+        'price',
+        'condition',
+        'img_url',
+        'description',
+        'category_id',
+        'user_id',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -37,5 +48,18 @@ class Item extends Model
     public function scopeFavoritedBy(Builder $query, int $userId): Builder
     {
         return $query->whereHas('likedBy', fn($qq) => $qq->where('likes.user_id', $userId));
+    }
+
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'category_item', 'item_id', 'category_id')
+            ->withTimestamps();
+    }
+
+    public function getIsSoldAttribute(): bool
+    {
+        return $this->relationLoaded('purchase')
+            ? !is_null($this->purchase)
+            : $this->purchase()->exists();
     }
 }

@@ -1,0 +1,350 @@
+/* ========= SOLD (中央ピル) ========= */
+.tile {
+    position: relative;
+}
+
+/* 売り切れカードはクリック不可＆やや薄く */
+.tile.is-sold .tile__link {
+    pointer-events: none;
+    cursor: default;
+}
+
+.tile.is-sold .tile__img {
+    filter: grayscale(20%);
+    opacity: .85;
+}
+
+/* 中央にシンプルなピル状の SOLD バッジ */
+.sold-pill {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #ff6b6b;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    letter-spacing: .15em;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
+    pointer-events: none;
+    user-select: none;
+}
+
+/* グリッド自体のリストマーカーを消す */
+.grid {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+/* 念押しで各タイルのマーカーも無効化 */
+.grid .tile {
+    list-style: none;
+}
+
+/* 既存のカード系 */
+.tile__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.tile__img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+.tile__name {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* ===== page container ===== */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+    /* タブの下に余白を作る */
+}
+
+/* ===== tabs ===== */
+.tabs {
+    display: flex;
+    gap: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin: 8px 0 18px;
+    /* タブと商品グリッドの間を少し広げる */
+}
+
+.tab {
+    font-weight: 600;
+    padding-bottom: 8px;
+}
+
+.tab.is-active {
+    color: #ff6b6b;
+    border-bottom: 2px solid #ff6b6b;
+}
+
+/* ===== grid ===== */
+.grid {
+    list-style: none;
+    /* 先頭の「・」を消す */
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: clamp(16px, 2.4vw, 28px);
+    /* 行間/列間を広めに */
+}
+
+.grid>li {
+    list-style: none;
+}
+
+/* タイル */
+.tile__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.tile__img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    /* 画像比率を揃える */
+    object-fit: cover;
+    border-radius: 12px;
+    background: #f6f6f6;
+    display: block;
+}
+
+.tile__name {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* SOLD 中央バッジ（クリック不可の重ね） */
+.tile {
+    position: relative;
+}
+
+.tile.is-sold .tile__link {
+    pointer-events: none;
+    opacity: .85;
+}
+
+.tile.is-sold::after {
+    content: "SOLD";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: .1em;
+    background: rgba(0, 0, 0, .28);
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+/* もう少し詰めたいスマホ時 */
+@media (max-width:480px) {
+    .grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+    }
+}
+
+/* --- グリッド既存のスタイルの下に追記してOK --- */
+
+/* SOLD バッジを中央に出す */
+.tile__link {
+    position: relative;
+    display: block;
+}
+
+.sold-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 6px 12px;
+    background: #ff6b6b;
+    color: #fff;
+    border-radius: 18px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .08em;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+    pointer-events: none;
+    /* クリックを拾わない */
+}
+
+/* クリック無効の見た目（任意で薄く） */
+.tile__link.is-disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: .85;
+}
+
+/* タブとグリッドの間・段間のマージンを広げる */
+.tabs {
+    display: flex;
+    gap: 16px;
+    margin: 12px 0 18px;
+}
+
+.grid {
+    display: grid;
+    gap: 18px;
+}
+
+/* デフォルト列数（中～大画面） */
+.grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+/* PC（1400–1540px）: 6列に拡張して密度を上げる */
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .tabs {
+        margin-bottom: 20px;
+    }
+}
+
+/* タブレット（768–850px）: 3列に落として見やすく */
+@media (min-width: 768px) and (max-width: 850px) {
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .tabs {
+        gap: 12px;
+        margin-bottom: 14px;
+    }
+}
+
+/* さらに狭い画面保険（任意）：2列 */
+@media (max-width: 600px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+}
+
+/* SOLD バッジ（中央・シンプル） */
+.tile__link {
+    position: relative;
+    display: block;
+}
+
+.sold-badge {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    letter-spacing: .06em;
+    font-size: 14px;
+    color: #fff;
+    background: rgba(0, 0, 0, .35);
+    content: "SOLD";
+}
+
+/* 画像のラッパー（画像と同じサイズ） */
+.tile__thumb {
+    position: relative;
+    display: block;
+    border-radius: 12px;
+    /* 角丸があれば */
+    overflow: hidden;
+    /* はみだし防止 */
+}
+
+/* 画像 */
+.tile__img {
+    display: block;
+    /* 余白消し */
+    width: 100%;
+    height: auto;
+}
+
+/* SOLD バッジ：画像の範囲だけ覆う＆中央表示 */
+.sold-badge {
+    position: absolute;
+    inset: 0;
+    /* ラッパー全体 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, .35);
+    /* 半透明の黒 */
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: .06em;
+    font-size: 14px;
+    pointer-events: none;
+    /* クリックを妨げない（非売品でもクリック無効はリンク側で制御済） */
+}
+
+/* 画像ラッパー：リンク幅いっぱいで画像と同じサイズになる */
+.tile__thumb {
+    position: relative;
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+    /* 角丸を維持したい場合 */
+    overflow: hidden;
+    /* SOLD がはみ出さないように */
+}
+
+/* 画像は従来どおりタイル幅いっぱい */
+.tile__thumb>.tile__img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* SOLD バッジ：画像の中央にだけ乗せる（サイズはバッジ分だけ） */
+.sold-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, .55);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1;
+    pointer-events: none;
+    /* クリックの邪魔をしない（リンク自体は別途無効化済み） */
+}
+
+/* 例: デフォルト */
+.grid {
+    display: grid;
+    gap: 24px 28px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* 広い画面では1枚の最小幅を少し広げる */
+@media (min-width: 1200px) {
+    .grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}

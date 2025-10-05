@@ -1,46 +1,38 @@
 @extends('layouts.app')
+@section('title', '会員登録')
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/auth.css') }}?v=2">
+@endpush
 
 @section('content')
+<div class="auth-page">
+    <div class="auth">
+        <h1 class="auth__title">会員登録</h1>
 
-<link rel="stylesheet" href="{{ asset('css/register.css') }}">
+        <form method="POST" action="{{ route('register') }}" novalidate>
+            @csrf
 
-<div class="register-container">
-    <h2>会員登録</h2>
+            <label for="name">ユーザー名</label>
+            <input id="name" type="text" name="name" value="{{ old('name') }}">
+            @error('name') <div class="error-message">{{ $message }}</div> @enderror
 
-    <form method="POST" action="{{ route('register.submit') }}" novalidate>
-        @csrf
-        <div>
-            <label>ユーザー名</label>
-            <input type="text" name="name" value="{{ old('name') }}" required>
-            @error('name')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div>
-            <label>メールアドレス</label>
-            <input type="email" name="email" value="{{ old('email') }}" required>
-            @error('email')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div>
-            <label>パスワード</label>
-            <input type="password" name="password" required>
-            @error('password')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="form-group mb-extra">
+            <label for="email">メールアドレス</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}">
+            @error('email') <div class="error-message">{{ $message }}</div> @enderror
+
+            <label for="password">パスワード</label>
+            <input id="password" type="password" name="password">
+            @error('password') <div class="error-message">{{ $message }}</div> @enderror
+
             <label for="password_confirmation">確認用パスワード</label>
-            <input type="password" name="password_confirmation" required>
-            @error('password')
-            <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <button type="submit">登録する</button>
-    </form>
+            <input id="password_confirmation" type="password" name="password_confirmation">
+            @error('password_confirmation') <div class="error-message">{{ $message }}</div> @enderror
 
-    <a href="{{ route('login') }}">ログインはこちら</a>
+            <button type="submit" class="btn-primary">登録する</button>
+        </form>
+
+        <a class="auth__link" href="{{ route('login') }}">ログインはこちら</a>
+    </div>
 </div>
-
 @endsection
