@@ -9,7 +9,8 @@ use App\Http\Controllers\{
     ProfileController,
     CommentController,
     LikeController,
-    MyPageController
+    MyPageController,
+    ItemLikeController
 };
 
 // Home

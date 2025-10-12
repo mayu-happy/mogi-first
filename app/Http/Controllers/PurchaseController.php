@@ -26,6 +26,14 @@ class PurchaseController extends Controller
     /** 購入確認画面（小計） */
     public function create(Request $request, Item $item)
     {
+
+        if ($item->user_id === auth()->id()) {
+            return redirect()->route('items.show', $item)->with('status', '自分の商品は購入できません');
+        }
+        if ($item->purchase()->exists()) {
+            return redirect()->route('items.show', $item)->with('status', 'この商品は売り切れです');
+        }
+
         // 1) クエリ -> セッション -> 既定値 の順で決定
         $paymentKey = $request->query(
             'payment',
@@ -121,6 +129,11 @@ class PurchaseController extends Controller
     /** 購入確定 */
     public function store(Request $request, Item $item)
     {
+
+        if ($item->user_id === auth()->id() || $item->purchase()->exists()) {
+            return redirect()->route('items.show', $item)->with('status', '購入できません');
+        }
+        
         $user       = Auth::user();
         $paymentKey = (string) session('purchase.payment', 'conbini');
 

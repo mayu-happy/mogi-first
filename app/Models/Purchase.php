@@ -15,7 +15,8 @@ class Purchase extends Model
     protected $fillable = [
         'user_id',
         'item_id',
-        // 'payment_method', 'status', ... 必要に応じて
+        'price',
+        'status'
     ];
 
     public function item()

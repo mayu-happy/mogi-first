@@ -667,3 +667,36 @@ header.site-header .nav .nav__cta {
         max-width: 1520px;
     }
 }
+
+.form-error {
+    color: #e53935;
+    /* はっきりした赤 */
+    font-size: 14px;
+    /* ログイン画面に合わせる */
+    line-height: 1.4;
+    margin: 6px 0 0;
+    /* 入力欄との間隔 */
+}
+
+/* ページネーションの矢印が巨大化する対策 */
+.pagination svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex: none;
+}
+
+/* ついでに見た目を整える（任意） */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 24px 0;
+}
+
+.pagination .page-link,
+.pagination a,
+.pagination span {
+    font-size: 14px;
+    line-height: 1;
+    padding: 8px 10px;
+}

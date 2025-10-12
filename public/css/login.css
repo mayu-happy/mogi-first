@@ -213,3 +213,15 @@
         max-width: 92vw;
     }
 }
+
+/* ---- Auth 共通エラーメッセージ ---- */
+.form-error {
+    color: #e53935;
+    /* はっきりした赤 */
+    font-size: 14px;
+    /* ログイン画面に合わせる */
+    line-height: 1.4;
+    margin: 6px 0 0;
+    /* 入力欄との間隔 */
+}
+

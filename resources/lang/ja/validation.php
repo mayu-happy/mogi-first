@@ -28,8 +28,8 @@ return [
     'attributes' => [
         'email' => 'メールアドレス',
         'password' => 'パスワード',
-        'password_confirmation' => 'パスワード（確認）',
-        'name' => 'お名前',
+        'password_confirmation' => '確認用パスワード',
+        'name' => 'ユーザー名',
         'body' => 'コメント',
         'q'    => 'キーワード',
     ],

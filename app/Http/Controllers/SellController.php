@@ -7,8 +7,8 @@ use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Storage;
 use App\Models\ItemImage;
+use Illuminate\Support\Facades\Storage;
 
 class SellController extends Controller
 {
@@ -82,61 +82,62 @@ class SellController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'name'        => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:2000'],
-            'price'       => ['required', 'integer', 'min:1'],
-            'condition'   => ['nullable', 'string'],
-            'brand'       => ['nullable', 'string', 'max:255'],
-            'image'       => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,gif', 'max:4096'],
-            'category_ids'   => ['required', 'array', 'min:1'],
+        $v = $request->validate([
+            'name'          => ['required', 'string', 'max:255'],
+            'brand'         => ['nullable', 'string', 'max:255'],
+            'description'   => ['required', 'string', 'max:2000'],
+            'price'         => ['required', 'integer', 'min:1'],
+            'condition'     => ['nullable', 'string', 'max:255'],
+            'category_ids'  => ['required', 'array', 'min:1'],
             'category_ids.*' => ['integer', 'exists:categories,id'],
+            'image'         => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:4096'],
         ]);
 
-        $imgUrl = null;
+        $imgRel = null;
         if ($request->hasFile('image')) {
-            $path   = $request->file('image')->store('items', 'public');
-            $imgUrl = Storage::url($path);
+            $stored = $request->file('image')->store('items', 'public'); // => items/xxxx.jpg
+            $imgRel = ltrim($stored, '/');
         }
 
         $item = Item::create([
             'user_id'     => $request->user()->id,
-            'name'        => $validated['name'],
-            'description' => $validated['description'],
-            'price'       => $validated['price'],
-            'condition'   => $validated['condition'],
-            'brand'       => $validated['brand'] ?? null,
-            'img_url'     => $imgUrl,
+            'name'        => $v['name'],
+            'brand'       => $v['brand'] ?? null,
+            'description' => $v['description'],
+            'price'       => $v['price'],
+            'condition'   => $v['condition'] ?? null,
+            'img_url'     => $imgRel,
         ]);
 
         foreach (session('draft_images', []) as $path) {
-            ItemImage::create(['item_id' => $item->id, 'path' => $path]);
+            $rel = str_starts_with($path, 'public/') ? substr($path, 7) : $path;
+            ItemImage::create(['item_id' => $item->id, 'path' => $rel, 'is_main' => false]);
         }
-
         $request->session()->forget('draft_images');
 
-        $item->categories()->sync($validated['category_ids']);
+        $item->categories()->sync($v['category_ids']);
 
-        return redirect()->route('sell.create')->with('status', '出品しました');
+        return redirect()->route('items.index')->with('status', '出品が完了しました');
     }
 
     public function uploadImages(Request $request)
     {
         $request->validate([
-            'images.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
+            'images'   => ['required', 'array', 'min:1'],
+            'images.*' => ['image', 'mimes:jpeg,jpg,png,webp,gif', 'max:5120'],
         ]);
 
-        $draft =  [];
+        $draft = collect($request->session()->get('draft_images', []));
 
         foreach ($request->file('images', []) as $file) {
-            $path     = $file->store('public/items');  // storage/app/public/items
-            $draft[]  = $path;                         // セッションへ積む
+            $path = $file->store('items', 'public');
+            $draft->push($path);
         }
 
-        $request->session()->put('draft_images', array_values(array_unique($draft)));
+        $request->session()->put('draft_images', $draft->unique()->values()->all());
 
-        // ★ ここを back() ではなく create に固定で戻す
-        return redirect()->route('sell.create')
+        return redirect()
+            ->route('sell.create')
             ->with('image_status', '画像をアップロードしました');
     }
 }

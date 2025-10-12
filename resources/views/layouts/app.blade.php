@@ -9,7 +9,7 @@
     {{-- 共通スタイル --}}
     <link rel="stylesheet" href="{{ asset('css/common.css') }}?v=3">
 
-    {{-- 画面固有スタイル（各ビューから @push('styles') で追加） --}}
+    {{-- 画面固有スタイル --}}
     @stack('styles')
 </head>
 

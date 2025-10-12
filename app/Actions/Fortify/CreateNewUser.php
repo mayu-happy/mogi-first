@@ -26,11 +26,11 @@ class CreateNewUser implements CreatesNewUsers   // ★ implements を追加
             ],
             // 任意メッセージ（必要に応じて）
             [
-                'password.confirmed' => 'パスワードが一致しません。',
-                'password.required'  => 'パスワードを入力してください。',
-                'password.min'       => 'パスワードは8文字以上で入力してください。',
-                'email.email'        => 'メールアドレスの形式が正しくありません。',
-                'name.required'      => 'お名前を入力してください。',
+                'password.confirmed' => 'パスワードと一致しません',
+                'password.required'  => 'パスワードを入力してください',
+                'password.min'       => 'パスワードは8文字以上で入力してください',
+                'email.email'        => 'メールアドレスはメール形式で入力してください',
+                'name.required'      => 'お名前を入力してください',
             ],
             [
                 'password' => 'パスワード',

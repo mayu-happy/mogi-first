@@ -51,13 +51,19 @@ class ProfileController extends Controller
 
     public function show()
     {
-        $user = auth()->user()->load([
-            'items',
-            'purchases.item',
-        ]);
+        $user = auth()->user();
 
-        $sells = $user->items;
-        $buys  = $user->purchases->pluck('item')->filter();
+        $sells = $user->items()
+            ->with(['mainImage', 'images'])
+            ->latest()
+            ->get();
+
+        $buys = $user->purchases()
+            ->with(['item.mainImage', 'item.images'])
+            ->latest()
+            ->get()
+            ->pluck('item')
+            ->filter();
 
         return view('mypage.profile', compact('user', 'sells', 'buys'));
     }

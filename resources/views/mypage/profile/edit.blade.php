@@ -51,7 +51,6 @@
             <input type="text" name="building" value="{{ old('building', $user->building) }}" class="form-control">
         </div>
 
-        {{-- メインではなく控えめに見せたいので、btn-secondary等にしておく --}}
         <button type="submit" class="btn btn-outline-secondary w-100">更新する</button>
     </form>
 </div>

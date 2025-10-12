@@ -14,10 +14,10 @@ class Category extends Model
     public function items(): BelongsToMany
     {
         return $this->belongsToMany(
-            Item::class,    
-            'category_item', 
-            'category_id',   
-            'item_id'        
+            Item::class,
+            'category_item',
+            'category_id',
+            'item_id'
         )->withTimestamps();
     }
 }

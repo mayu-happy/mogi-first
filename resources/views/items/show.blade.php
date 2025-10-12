@@ -1,176 +1,107 @@
-{{-- resources/views/items/show.blade.php --}}
 @extends('layouts.app')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/item-show.css') }}?v=3">
 @endpush
 
+@section('title', $item->name)
+
 @section('content')
-<div class="product">
-  {{-- ===== 左：商品画像 ===== --}}
-  <div class="product__media">
-    @php
-    use Illuminate\Support\Str;
+<div class="item-detail">
+  <div class="item-detail__grid">
 
-    // 画像URLの決定（http(s) はそのまま / 相対や /storage は asset() / 未設定は noimage）
-    $raw = $item->img_url;
-    $imgSrc = $raw
-    ? (Str::startsWith($raw, ['http://','https://']) ? $raw : asset($raw))
-    : asset('images/noimage.png');
+    {{-- 左：画像 --}}
+    <figure class="media">
+      <img class="media__img"
+        src="{{ $item->image_url ?: asset('images/noimage.svg') }}"
+        alt="{{ $item->name }}"
+        onerror="this.src='{{ asset('images/noimage.svg') }}'">
+    </figure>
 
-    // SOLD 判定（購入テーブルがあれば売り切れ）
-    $isSold = $item->relationLoaded('purchase') ? (bool) $item->purchase : $item->purchase()->exists();
-    @endphp
+    {{-- 右：情報 --}}
+    {{-- ...省略（画像ブロックの下） --}}
 
-    <img class="product__img" src="{{ $imgSrc }}" alt="{{ $item->name }}">
-  </div>
+    <aside class="panel">
+      <h1 class="title">{{ $item->name }}</h1>
+      @if($item->brand)
+      <div class="brand">{{ $item->brand }}</div>
+      @endif
 
-  {{-- ===== 右：詳細情報 ===== --}}
-  <aside>
-    {{-- タイトル・ブランド・価格 --}}
-    <h1 class="product__title">{{ $item->name }}</h1>
-    <div class="product__brand">{{ $item->brand ?: 'ブランドなし' }}</div>
-    <div class="product__price">
-      ¥{{ number_format($item->price) }} <span class="muted" style="font-size:12px">（税込）</span>
-    </div>
+      <div class="price">¥{{ number_format($item->price) }} <span class="muted">（税込）</span></div>
 
-    {{-- いいね＆コメント数 --}}
-    <div class="product__section">
-      <div class="chips" style="display:flex;gap:8px;align-items:center;position:relative;z-index:2;">
-        @php
-        $liked = false;
-        if (auth()->check()) {
-        $liked = $item->relationLoaded('likedBy')
-        ? $item->likedBy->contains(auth()->id())
-        : $item->likedBy()->where('users.id', auth()->id())->exists();
-        }
-        $likesCount = $item->liked_by_count ?? $item->likedBy()->count();
-        $commentsCount = $item->comments_count ?? $item->comments()->count();
-        @endphp
-
+      <div class="mini-stats">
+        {{-- ☆：ログイン時はPOSTでトグル、未ログインはログインへ --}}
         @auth
-        <form action="{{ route('items.likes.toggle', $item) }}" method="post" style="display:inline">
+        <form action="{{ route('items.likes.toggle', $item) }}" method="post" class="mini-stat-form">
           @csrf
-          <button
-            type="submit"
-            class="chip chip--plain"
-            aria-pressed="{{ $liked ? 'true' : 'false' }}"
-            title="{{ $liked ? 'いいね済み' : 'いいねする' }}">
-            ★ {{ $likesCount }}
+          <button type="submit"
+            class="mini-stat {{ ($liked ?? false) ? 'is-liked' : '' }}"
+            aria-pressed="{{ ($liked ?? false) ? 'true' : 'false' }}"
+            title="お気に入り">
+            <!-- ☆の線アイコン -->
+            <svg viewBox="0 0 24 24" class="mini-stat__icon" aria-hidden="true">
+              <path d="M12 17.3l-6.2 3.7 1.7-7.3L2 9.2l7.4-.6L12 2l2.6 6.6 7.4.6-5.5 4.5 1.7 7.3z" />
+            </svg>
+            <span class="mini-stat__num">{{ $item->liked_by_count ?? 0 }}</span>
           </button>
         </form>
         @else
-        <a
-          class="chip chip--plain"
-          href="{{ route('login') }}?redirect={{ urlencode(request()->fullUrl()) }}"
-          title="ログインしていいねできます">
-          ★ {{ $likesCount }}
+        <a href="{{ route('login') }}" class="mini-stat" title="お気に入り">
+          <svg viewBox="0 0 24 24" class="mini-stat__icon" aria-hidden="true">
+            <path d="M12 17.3l-6.2 3.7 1.7-7.3L2 9.2l7.4-.6L12 2l2.6 6.6 7.4.6-5.5 4.5 1.7 7.3z" />
+          </svg>
+          <span class="mini-stat__num">{{ $item->liked_by_count ?? 0 }}</span>
         </a>
         @endauth
 
-        <a class="chip" href="#comments" title="コメントへ移動">
-          💬 {{ $commentsCount }}
-        </a>
-      </div>
-    </div>
-
-    {{-- 購入ボタン（SOLD 対応） --}}
-    <div class="product__section form-block">
-      @if ($isSold)
-      <button class="btn btn--disabled" disabled aria-disabled="true">SOLD</button>
-      @else
-      <a class="btn btn--primary" href="{{ route('purchase.create', $item) }}">
-        購入手続きへ
-      </a>
-      @endif
-    </div>
-
-    {{-- 商品説明 --}}
-    <div class="product__section">
-      <h2>商品説明</h2>
-      <p class="muted">カラー：{{ $item->color ?? 'グレー' }}</p>
-      <p>{{ $item->description ?? '説明はありません。' }}</p>
-    </div>
-
-    {{-- 商品情報 --}}
-    <div class="product__section">
-      <h2>商品の情報</h2>
-      <dl class="product__kv">
-        <dt>カテゴリー</dt>
-        <dd class="badges">
-          @forelse(($item->categories ?? []) as $c)
-          <span class="badge">{{ $c->name }}</span>
-          @empty
-          <span class="muted">設定なし</span>
-          @endforelse
-        </dd>
-
-        <dt>商品の状態</dt>
-        <dd>{{ $item->condition ?? '不明' }}</dd>
-      </dl>
-    </div>
-
-    {{-- ===== コメント一覧 & 入力 ===== --}}
-    <section id="comments" style="margin-top:24px">
-      <h3 class="comments__title">
-        コメント <span class="comments__count">({{ $commentsCount }})</span>
-      </h3>
-      {{-- コメント一覧 --}}
-      @forelse ($item->comments as $c)
-      @php
-      // ユーザーアイコン（User に avatar_url アクセサがある想定 / なければ image を利用）
-      $avatar = optional($c->user)->avatar_url
-      ?? (optional($c->user)->image ? asset(optional($c->user)->image) : asset('images/avatar-placeholder.png'));
-      @endphp
-      <div style="display:flex;gap:8px;align-items:flex-start;margin:8px 0;">
-        <img
-          src="{{ $avatar }}"
-          alt="{{ optional($c->user)->name ?? 'user' }}"
-          style="width:28px;height:28px;border-radius:999px;object-fit:cover;background:#eee;">
-        <div>
-          <div style="font-weight:700;font-size:13px;">
-            {{ optional($c->user)->name ?? 'user' }}
-          </div>
-          <div style="font-size:13px;color:#333;">
-            {{ $c->body }}
-          </div>
+        {{-- 吹き出し：表示のみ（線アイコン） --}}
+        <div class="mini-stat" title="コメント数">
+          <svg viewBox="0 0 24 24" class="mini-stat__icon" aria-hidden="true">
+            <path d="M20 3H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h3v3l4.5-3H20a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" />
+          </svg>
+          <span class="mini-stat__num">{{ $item->comments_count ?? 0 }}</span>
         </div>
       </div>
-      @empty
-      <p class="muted" style="font-size:13px;"></p>
-      @endforelse
 
-      {{-- 入力欄（ログイン状態で表示） --}}
-      @auth
-      <form action="{{ route('items.comments.store', $item) }}" method="post" class="form-block">
-        @csrf
-        <textarea
-          name="body"
-          rows="4"
-          class="textarea"
-          placeholder="商品のコメントを入力">{{ old('body') }}</textarea>
+      <hr>
 
-        @error('body')
-        <p style="color:#d00;margin-top:6px;">{{ $message }}</p>
-        @enderror
+      <section class="desc">
+        <h2>商品説明</h2>
+        <p class="body">{{ $item->description }}</p>
+      </section>
 
-        <button type="submit" class="btn btn--primary" style="margin-top:8px;">
-          コメントを送信する
-        </button>
-      </form>
-      @else
-      <div class="form-block">
-        <textarea
-          rows="4"
-          class="textarea"
-          disabled></textarea>
-        <a href="{{ route('login') }}?redirect={{ urlencode(request()->fullUrl()) }}"
-          class="btn btn--primary" style="margin-top:8px; text-decoration:none;">
-          コメントを送信する
-        </a>
-      </div>
-      @endauth
-    </section>
-  </aside>
+      <section class="meta">
+        <h2>商品の情報</h2>
+
+        {{-- ② カテゴリー：ラベルの横にチップを横並び表示 --}}
+        <div class="meta-row">
+          <div class="meta-label">カテゴリー</div>
+          <div class="meta-value">
+            @foreach($item->categories as $c)
+            <span class="chip">{{ $c->name }}</span>
+            @endforeach
+          </div>
+        </div>
+
+        {{-- ③ 商品の状態 --}}
+        <div class="meta-row">
+          <div class="meta-label">商品の状態</div>
+          <div class="meta-value">{{ $item->condition ?? 'ー' }}</div>
+        </div>
+      </section>
+
+      <section class="comments">
+        <h2>コメント <span class="muted">({{ $item->comments_count ?? 0 }})</span></h2>
+        @auth
+        <form method="POST" action="{{ route('items.comments.store', $item) }}" class="mt-8">
+          @csrf
+          <textarea name="body" rows="4" class="input" placeholder="コメントを入力"></textarea>
+          <button class="btn btn--primary" type="submit" style="width:100%;margin-top:8px">コメントを送信する</button>
+        </form>
+        @endauth
+      </section>
+    </aside>
+
+  </div>
 </div>
 @endsection

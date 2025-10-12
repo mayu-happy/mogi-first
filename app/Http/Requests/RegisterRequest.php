@@ -18,7 +18,7 @@ class RegisterRequest extends FormRequest
         return [
             'name'                  => ['required', 'string'],
             'email'                 => ['required', 'email', 'unique:users,email'],
-            'password'              => ['required', 'string', 'min:8', 'confirmed'],
+            'password'              => ['required', 'string', 'min:8'],
             'password_confirmation' => ['required', 'same:password'],
         ];
     }
@@ -26,7 +26,7 @@ class RegisterRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'name' => 'お名前',
+            'name' => 'ユーザー名',
             'email' => 'メールアドレス',
             'password' => 'パスワード',
             'password_confirmation' => '確認用パスワード',
@@ -42,7 +42,7 @@ class RegisterRequest extends FormRequest
             'password.required' => 'パスワードを入力してください',
             'password.min'      => 'パスワードは8文字以上で入力してください',
             'password.confirmed' => 'パスワードと一致しません。',
-            'password_confirmation.required' => '確認用パスワードを入力してください',
+            'password_confirmation.required' => 'パスワードを入力してください',
             'password_confirmation.same'     => 'パスワードと一致しません。',
         ];
     }

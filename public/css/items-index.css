@@ -32,11 +32,11 @@
     user-select: none;
 }
 
-/* グリッド自体のリストマーカーを消す */
+/* 基本：スマホ2列 */
 .grid {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
 }
 
 /* 念押しで各タイルのマーカーも無効化 */
@@ -51,13 +51,6 @@
     color: inherit;
 }
 
-.tile__img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: 8px;
-    display: block;
-}
 
 .tile__name {
     margin-top: 8px;
@@ -99,8 +92,8 @@ main {
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: clamp(16px, 2.4vw, 28px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
     /* 行間/列間を広めに */
 }
 
@@ -115,15 +108,6 @@ main {
     color: inherit;
 }
 
-.tile__img {
-    width: 100%;
-    aspect-ratio: 4/3;
-    /* 画像比率を揃える */
-    object-fit: cover;
-    border-radius: 12px;
-    background: #f6f6f6;
-    display: block;
-}
 
 .tile__name {
     margin-top: 8px;
@@ -153,16 +137,6 @@ main {
     border-radius: 12px;
     pointer-events: none;
 }
-
-/* もう少し詰めたいスマホ時 */
-@media (max-width:480px) {
-    .grid {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 14px;
-    }
-}
-
-/* --- グリッド既存のスタイルの下に追記してOK --- */
 
 /* SOLD バッジを中央に出す */
 .tile__link {
@@ -201,16 +175,6 @@ main {
     margin: 12px 0 18px;
 }
 
-.grid {
-    display: grid;
-    gap: 18px;
-}
-
-/* デフォルト列数（中～大画面） */
-.grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-}
-
 /* PC（1400–1540px）: 6列に拡張して密度を上げる */
 @media (min-width: 1400px) and (max-width: 1540px) {
     .grid {
@@ -223,24 +187,17 @@ main {
     }
 }
 
-/* タブレット（768–850px）: 3列に落として見やすく */
-@media (min-width: 768px) and (max-width: 850px) {
+/* タブレット：3列 */
+@media (min-width: 768px) {
     .grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
-    }
-
-    .tabs {
-        gap: 12px;
-        margin-bottom: 14px;
     }
 }
 
-/* さらに狭い画面保険（任意）：2列 */
-@media (max-width: 600px) {
+/* PC：4列固定（全画面でも6列にならない） */
+@media (min-width: 1024px) {
     .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 }
 
@@ -264,24 +221,6 @@ main {
     content: "SOLD";
 }
 
-/* 画像のラッパー（画像と同じサイズ） */
-.tile__thumb {
-    position: relative;
-    display: block;
-    border-radius: 12px;
-    /* 角丸があれば */
-    overflow: hidden;
-    /* はみだし防止 */
-}
-
-/* 画像 */
-.tile__img {
-    display: block;
-    /* 余白消し */
-    width: 100%;
-    height: auto;
-}
-
 /* SOLD バッジ：画像の範囲だけ覆う＆中央表示 */
 .sold-badge {
     position: absolute;
@@ -300,24 +239,6 @@ main {
     /* クリックを妨げない（非売品でもクリック無効はリンク側で制御済） */
 }
 
-/* 画像ラッパー：リンク幅いっぱいで画像と同じサイズになる */
-.tile__thumb {
-    position: relative;
-    display: block;
-    width: 100%;
-    border-radius: 12px;
-    /* 角丸を維持したい場合 */
-    overflow: hidden;
-    /* SOLD がはみ出さないように */
-}
-
-/* 画像は従来どおりタイル幅いっぱい */
-.tile__thumb>.tile__img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
 /* SOLD バッジ：画像の中央にだけ乗せる（サイズはバッジ分だけ） */
 .sold-badge {
     position: absolute;
@@ -332,19 +253,154 @@ main {
     font-size: 13px;
     line-height: 1;
     pointer-events: none;
-    /* クリックの邪魔をしない（リンク自体は別途無効化済み） */
 }
 
-/* 例: デフォルト */
-.grid {
+.grid--cap .tile {
+    width: 100%;
+    max-width: 320px;
+    /* 好きな上限に。280〜360pxあたりが見やすい */
+    justify-self: center;
+    /* グリッドのセル内で中央に */
+}
+
+/* 画像枠は比率固定（例：1:1） */
+.thumb,
+.product__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #f3f3f3;
+}
+
+
+/* 画像なしのプレースホルダー */
+.noimage {
+    width: 100%;
+    height: 100%;
     display: grid;
-    gap: 24px 28px;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    place-items: center;
+    /* 中央寄せ */
+    color: #9aa0a6;
+    font-weight: 700;
+    letter-spacing: .08em;
+    background:
+        linear-gradient(180deg, #f7f7f9, #eceff3);
+    /* ほんのりグラデ */
+    text-transform: uppercase;
+    /* NO IMAGE → 大文字 */
+    font-size: clamp(12px, 3vw, 18px);
+    user-select: none;
 }
 
-/* 広い画面では1枚の最小幅を少し広げる */
-@media (min-width: 1200px) {
-    .grid {
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    }
+
+.noimage {
+    position: absolute;
+    inset: 0;
+    display: none;
+    place-items: center;
+    background: linear-gradient(180deg, #f7f7f9, #eceff3);
+    color: #9aa0a6;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-size: clamp(12px, 3vw, 16px);
+    user-select: none;
+}
+
+.noimage.is-visible {
+    display: grid;
+}
+
+.noimage {
+    position: absolute;
+    inset: 0;
+    display: none;
+    place-items: center;
+    background: linear-gradient(180deg, #f7f7f9, #eceff3);
+    color: #9aa0a6;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-size: clamp(12px, 3vw, 16px);
+}
+
+.noimage.is-visible {
+    display: grid;
+}
+
+/* 一覧の無効カード見た目（任意） */
+.tile__link--disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: .9;
+}
+
+/* 画像が見えない対策：JSなしでも常に表示 */
+.grid .tile__img {
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: static !important;
+}
+
+.grid .tile__thumb {
+    background: #f3f3f3;
+}
+
+/* === 一覧のタイル === */
+
+/* 画像の枠：比率固定（正方形）、画像は枠内に収める（トリミングなし） */
+.tile__thumb,
+.tile_thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* 4:3 にしたいなら 4/3、16:9なら 16/9 */
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #f3f3f3;
+    background-position: center;
+    background-size: contain;
+    /* ── ここが “枠内に収める”  */
+    background-repeat: no-repeat;
+}
+
+
+.tile__img,
+.tile_img {
+    display: none;
+}
+
+/* 画像枠：比率固定（正方形） */
+.grid .tile__thumb {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* 好みで 4/3 や 16/9 に変更可 */
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f3f3f3;
+}
+
+/* 画像を“枠内に収める”（トリミングしない） */
+.grid .tile__thumb>.tile__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain !important;
+    /* ← これが効けば必ず収まる */
+    display: block;
+    background: none;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* もし background-image をまだ使っているカードが混ざっていても“収める” */
+.grid .tile__thumb[style*="background-image"] {
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
 }
