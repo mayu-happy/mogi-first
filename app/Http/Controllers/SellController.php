@@ -82,42 +82,45 @@ class SellController extends Controller
 
     public function store(Request $request)
     {
-        $v = $request->validate([
-            'name'          => ['required', 'string', 'max:255'],
-            'brand'         => ['nullable', 'string', 'max:255'],
-            'description'   => ['required', 'string', 'max:2000'],
-            'price'         => ['required', 'integer', 'min:1'],
-            'condition'     => ['nullable', 'string', 'max:255'],
-            'category_ids'  => ['required', 'array', 'min:1'],
-            'category_ids.*' => ['integer', 'exists:categories,id'],
-            'image'         => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:4096'],
+        $data = $request->validate([
+            'name'        => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'price'       => ['required', 'integer', 'min:1'],
+            'condition'   => ['required', 'string', 'max:50'],
+            'brand'       => ['nullable', 'string', 'max:255'],
+            'image'       => ['required', 'image', 'max:5120'],
+            'categories'  => ['array'], // 複数カテゴリ対応なら
+            'categories.*' => ['integer', 'exists:categories,id'],
         ]);
 
-        $imgRel = null;
-        if ($request->hasFile('image')) {
-            $stored = $request->file('image')->store('items', 'public'); // => items/xxxx.jpg
-            $imgRel = ltrim($stored, '/');
-        }
+        // 画像保存
+        $relPath = $request->file('image')->store('items', 'public'); // => items/xxxx.jpg
 
-        $item = Item::create([
-            'user_id'     => $request->user()->id,
-            'name'        => $v['name'],
-            'brand'       => $v['brand'] ?? null,
-            'description' => $v['description'],
-            'price'       => $v['price'],
-            'condition'   => $v['condition'] ?? null,
-            'img_url'     => $imgRel,
+        // アイテム作成
+        $item = \App\Models\Item::create([
+            'user_id'     => auth()->id(),
+            'name'        => $data['name'],
+            'description' => $data['description'],
+            'price'       => $data['price'],
+            'condition'   => $data['condition'],
+            'brand'       => $data['brand'] ?? null,
+            'img_url'     => $relPath, // ★ 画像パスを items.img_url に
         ]);
 
-        foreach (session('draft_images', []) as $path) {
-            $rel = str_starts_with($path, 'public/') ? substr($path, 7) : $path;
-            ItemImage::create(['item_id' => $item->id, 'path' => $rel, 'is_main' => false]);
+        // 中間テーブルにカテゴリを付与（必要な場合）
+        if (!empty($data['categories'])) {
+            $item->categories()->sync($data['categories']);
         }
-        $request->session()->forget('draft_images');
 
-        $item->categories()->sync($v['category_ids']);
+        // サブ画像テーブルを使う場合はメイン画像として 1 レコード作っておく（オプション）
+        if (method_exists($item, 'images')) {
+            $item->images()->create([
+                'path' => $relPath,
+                'is_main' => false,
+            ]);
+        }
 
-        return redirect()->route('items.index')->with('status', '出品が完了しました');
+        return redirect()->route('items.show', $item)->with('status', '出品が完了しました');
     }
 
     public function uploadImages(Request $request)

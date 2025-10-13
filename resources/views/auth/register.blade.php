@@ -38,5 +38,8 @@
         </div>
         <button type="submit" class="btn-primary w-100">登録する</button>
     </form>
+    <p class="auth-foot">
+        <a href="{{ route('login') }}">ログインはこちら</a>
+    </p>
 </div>
 @endsection

@@ -14,24 +14,6 @@
     opacity: .85;
 }
 
-/* 中央にシンプルなピル状の SOLD バッジ */
-.sold-pill {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background: #ff6b6b;
-    color: #fff;
-    font-weight: 700;
-    font-size: 14px;
-    padding: 6px 14px;
-    border-radius: 999px;
-    letter-spacing: .15em;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .15);
-    pointer-events: none;
-    user-select: none;
-}
-
 /* 基本：スマホ2列 */
 .grid {
     display: grid;
@@ -144,22 +126,6 @@ main {
     display: block;
 }
 
-.sold-badge {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 6px 12px;
-    background: #ff6b6b;
-    color: #fff;
-    border-radius: 18px;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: .08em;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
-    pointer-events: none;
-    /* クリックを拾わない */
-}
 
 /* クリック無効の見た目（任意で薄く） */
 .tile__link.is-disabled {
@@ -205,38 +171,6 @@ main {
 .tile__link {
     position: relative;
     display: block;
-}
-
-.sold-badge {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    letter-spacing: .06em;
-    font-size: 14px;
-    color: #fff;
-    background: rgba(0, 0, 0, .35);
-    content: "SOLD";
-}
-
-/* SOLD バッジ：画像の範囲だけ覆う＆中央表示 */
-.sold-badge {
-    position: absolute;
-    inset: 0;
-    /* ラッパー全体 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, .35);
-    /* 半透明の黒 */
-    color: #fff;
-    font-weight: 700;
-    letter-spacing: .06em;
-    font-size: 14px;
-    pointer-events: none;
-    /* クリックを妨げない（非売品でもクリック無効はリンク側で制御済） */
 }
 
 /* SOLD バッジ：画像の中央にだけ乗せる（サイズはバッジ分だけ） */
@@ -403,4 +337,50 @@ main {
     background-size: contain !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
+}
+
+/* 売り切れタイル：クリック不可・見た目 */
+.tile.is-sold .tile__link {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.tile.is-sold .tile__img {
+    filter: grayscale(20%) opacity(.7);
+}
+
+
+/* 画像ラッパーに相対配置を保証（既にあれば不要） */
+.tile__thumb {
+    position: relative;
+    display: block;
+}
+
+/* 画像ラッパーは相対配置（オーバーレイを画像の上だけに載せる） */
+.tile__thumb {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    /* 角丸があれば画像に合わせて切る */
+    border-radius: inherit;
+    /* 画像の角丸に追従（任意） */
+}
+
+/* クリック不可の見た目はそのまま */
+.tile.is-disabled .tile__link {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* 画像だけを少し暗くする（テキストには影響なし） */
+.tile.is-disabled .tile__img {
+    filter: grayscale(15%) opacity(.85);
+}
+
+/* 半透明レイヤー（画像全面） */
+.sold-dim {
+    position: absolute;
+    inset: 0;
+    /* top:0 right:0 bottom:0 left:0 のショートハンド */
+    background: rgba(0, 0, 0, .35);
 }

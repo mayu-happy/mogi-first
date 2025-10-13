@@ -9,23 +9,29 @@ class Purchase extends Model
 {
     use HasFactory;
 
-    // 既存テーブルが "purchases" なら指定不要（Laravelが自動で推測）
-    // protected $table = 'purchases';
-
     protected $fillable = [
         'user_id',
         'item_id',
         'price',
-        'status'
+        'payment_method', 
+        'postal_code',    
+        'address',         
+        'building',      
+        'status',        
+    ];
+
+    // 使っていれば例でキャスト
+    protected $casts = [
+        'price' => 'integer',
     ];
 
     public function item()
     {
-        return $this->belongsTo(Item::class, 'item_id');
+        return $this->belongsTo(Item::class);
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
     }
 }

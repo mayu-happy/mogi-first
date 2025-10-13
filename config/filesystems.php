@@ -53,6 +53,12 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
 
+        'testing' => [
+            'driver' => 'local',
+            'root'   => storage_path('framework/testing/disks'),
+            'throw'  => false,
+        ],
+
     ],
 
     /*

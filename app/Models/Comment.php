@@ -1,22 +1,22 @@
 <?php
-declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Comment extends Model
 {
-    protected $fillable = ['body','user_id','item_id'];
+    use HasFactory;
 
-    public function user(): BelongsTo
+    protected $fillable = ['item_id', 'user_id', 'body'];
+
+    public function item()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Item::class);
     }
-
-    public function item(): BelongsTo
+    public function user()
     {
-        return $this->belongsTo(Item::class, 'item_id');
+        return $this->belongsTo(User::class);
     }
 }

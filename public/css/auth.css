@@ -100,3 +100,20 @@
     /* 入力欄との間隔 */
 }
 
+/* ログインリンクを中央＆青に */
+.auth-foot {
+    text-align: center;
+    margin-top: 12px;
+}
+
+.auth-foot a {
+    color: #0d6efd !important;
+    /* 見本っぽい青。上書きされても効くように */
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.auth-foot a:hover {
+    text-decoration: none;
+    /* ホバー時も消したまま */
+}

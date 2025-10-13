@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ItemController extends Controller
 {
-    public function index(\Illuminate\Http\Request $request)
+    public function index(Request $request)
     {
         $tab = $request->query('tab') === 'mylist' ? 'mylist' : 'recommend';
-        $kw  = trim((string) $request->query('q', ''));
+        $q   = trim((string) $request->query('q', ''));
 
         $query = Item::query()
             ->with(['user'])
@@ -21,33 +22,35 @@ class ItemController extends Controller
             ->withCount(['comments', 'likedBy'])
             ->latest('id');
 
-        if (Auth::check()) {
-            $query->where('user_id', '!=', Auth::id());
-        }
-
-        if ($kw !== '') {
-            $query->where(function ($q) use ($kw) {
-                $q->where('name', 'like', "%{$kw}%")
-                    ->orWhere('description', 'like', "%{$kw}%");
+        // 検索
+        if ($q !== '') {
+            $query->where(function ($qq) use ($q) {
+                $qq->where('name', 'like', "%{$q}%")
+                    ->orWhere('description', 'like', "%{$q}%");
             });
         }
 
         if ($tab === 'mylist') {
-            if (!Auth::check()) {
-                return redirect()->route('login')
-                    ->with('status', 'マイリストを見るにはログインが必要です。');
+            if (Auth::check()) {
+                // 自分の出品は非表示にしたい場合（任意）
+                $query->where('user_id', '!=', Auth::id());
+
+                // いいねした商品のみ
+                $query->whereHas('likedBy', fn($qq) => $qq->whereKey(Auth::id()));
+                $items = $query->paginate(24)->withQueryString();
+            } else {
+                // 未認証はマイリストを表示しない
+                $items = collect();
             }
-            $query->whereHas('likedBy', fn($q) => $q->where('users.id', Auth::id()))
-                ->where('user_id', '!=', Auth::id());
+        } else {
+            // おすすめ：未認証でも全件表示（ログイン時は自分の出品を除外したい場合は以下を残す）
+            if (Auth::check()) {
+                $query->where('user_id', '!=', Auth::id());
+            }
+            $items = $query->paginate(24)->withQueryString();
         }
 
-        $items = Item::with(['mainImage', 'images', 'purchase'])
-            ->latest()
-            ->paginate(24);
-
-        $items = $query->paginate(24)->withQueryString();
-
-        return view('items.index', compact('items', 'tab', 'kw'));
+        return view('items.index', compact('items', 'tab', 'q'));
     }
 
     public function show(Item $item)
@@ -70,8 +73,12 @@ class ItemController extends Controller
             $with[] = 'purchase';
         }
 
-        if ($with) $item->load($with);
-        if ($withCount) $item->loadCount($withCount);
+        if (!empty($with)) {
+            $item->load($with);
+        }
+        if (!empty($withCount)) {
+            $item->loadCount($withCount);
+        }
 
         $liked = false;
         if (Schema::hasTable('likes') && auth()->check()) {
@@ -82,7 +89,17 @@ class ItemController extends Controller
 
         $isSold = Schema::hasTable('purchases') ? (bool) $item->purchase : false;
 
-        return view('items.show', compact('item', 'liked', 'isSold'));
+        if (Schema::hasTable('comments')) {
+            $comments = $item->comments()
+                ->with('user:id,name')
+                ->latest()
+                ->paginate(10)          // 件数はお好みで
+                ->withQueryString();
+        } else {
+            $comments = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
+        }
+
+        return view('items.show', compact('item', 'liked', 'isSold', 'comments'));
     }
 
     public function store(Request $request)

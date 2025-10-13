@@ -18,33 +18,31 @@ class MyPageController extends Controller
      * マイページ（プロフィール＋タブ切替：sell / buy / likes）
      * /mypage や /mypage/profile からここに来る想定
      */
-    public function profile(Request $request)
+    public function profile(\Illuminate\Http\Request $request)
     {
-        $user = Auth::user()->loadCount(['items', 'purchases', 'favorites']);
+        $user = \Illuminate\Support\Facades\Auth::user()->loadCount(['items', 'purchases', 'favorites']);
 
-        // タブと検索語（スペース区切り）を取得
-        $tab   = $request->query('tab', 'sell');                 // sell|buy|likes
+        $tab   = $request->query('tab', 'sell'); // sell|buy|likes
         $q     = trim((string) $request->query('q', ''));
         $terms = $q !== '' ? preg_split('/[\s　]+/u', $q, -1, PREG_SPLIT_NO_EMPTY) : [];
 
-        // タブごとにベースクエリ
         if ($tab === 'buy') {
-            $query = Item::with('purchase')
+            // 購入した商品（items 経由で取得）
+            $query = \App\Models\Item::with('purchase')
                 ->whereHas('purchase', fn($qq) => $qq->where('user_id', $user->id));
         } elseif ($tab === 'likes') {
-            // User::likedItems() が必要（下にリレーション記述あり）
+            // いいね一覧（必要なら）
             $query = $user->likedItems()->with('purchase');
         } else {
             $tab = 'sell';
             $query = $user->items()->with('purchase');
         }
 
-        // キーワード（AND）検索: name LIKE %term%
         foreach ($terms as $t) {
-            $query->where('name', 'like', '%' . $t . '%');
+            $query->where('name', 'like', "%{$t}%");
         }
 
-        $items = $query->latest()->paginate(12)->withQueryString();
+        $items = $query->latest()->paginate(24)->withQueryString();
 
         return view('mypage.profile', [
             'user'  => $user,

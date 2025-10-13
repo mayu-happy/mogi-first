@@ -66,33 +66,41 @@ class Item extends Model
             : $this->purchase()->exists();
     }
 
-    public function getImageUrlAttribute(): ?string
+    public function getImageUrlAttribute(): string
     {
-        $raw = $this->img_url;
+        $raw = $this->attributes['image_url']
+            ?? $this->attributes['img_url']
+            ?? null;
 
-        if (empty($raw)) {
+        if (!$raw) {
             $raw = $this->relationLoaded('mainImage')
                 ? optional($this->mainImage)->path
                 : $this->mainImage()->value('path');
 
-            if (empty($raw)) {
+            if (!$raw) {
                 $raw = $this->relationLoaded('images')
                     ? optional($this->images->first())->path
                     : $this->images()->orderBy('id')->value('path');
             }
-
-            if (empty($raw)) return null;
         }
 
-        if (Str::startsWith($raw, ['http://', 'https://'])) return $raw;
+        if (!$raw) {
+            return asset('images/noimage.svg');
+        }
+
+        if (Str::startsWith($raw, ['http://', 'https://'])) {
+            return $raw;
+        }
 
         $rel = ltrim($raw, '/');
-        if (Str::startsWith($rel, 'storage/')) $rel = Str::after($rel, 'storage/');
-        if (Str::startsWith($rel, 'public/'))  $rel = Str::after($rel, 'public/');
+        $rel = Str::after($rel, 'storage/'); 
+        $rel = Str::after($rel, 'public/');  
 
-        if (!Storage::disk('public')->exists($rel)) return null;
+        if (Storage::disk('public')->exists($rel)) {
+            return Storage::disk('public')->url($rel);
+        }
 
-        return asset('storage/' . $rel);
+        return asset('images/noimage.svg');
     }
 
     public function images(): HasMany
@@ -114,5 +122,21 @@ class Item extends Model
     public function getImgSrcAttribute(): string
     {
         return $this->image_url ?? asset('images/noimage.png');
+    }
+
+    public function getThumbUrlAttribute(): string
+    {
+        $candidates = [
+            $this->image_url ?? null,
+            $this->img_url   ?? null,
+            $this->image     ?? null,
+        ];
+
+        foreach ($candidates as $path) {
+            if (!$path) continue;
+            if (Str::startsWith($path, ['http://', 'https://', '/'])) return $path;
+            return Storage::url($path);
+        }
+        return asset('images/noimage.png');
     }
 }

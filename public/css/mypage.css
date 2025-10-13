@@ -169,3 +169,119 @@
     background: rgba(0, 0, 0, .6);
     color: #fff;
 }
+
+/* クリック不可の見た目 */
+.tile.is-disabled .tile__link {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.tile.is-disabled .tile__img {
+    filter: grayscale(20%) opacity(.75);
+}
+
+/* 画像ラッパーは相対配置に */
+.tile__thumb {
+    position: relative;
+    display: block;
+}
+
+.badge-own {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 9999px;
+    background: #eef2ff;
+    color: #4f46e5;
+}
+
+/* 画像ラッパーは相対配置（オーバーレイを画像の上だけに載せる） */
+.tile__thumb {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    /* 角丸があれば画像に合わせて切る */
+    border-radius: inherit;
+    /* 画像の角丸に追従（任意） */
+}
+
+/* クリック不可の見た目はそのまま */
+.tile.is-disabled .tile__link {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* 画像だけを少し暗くする（テキストには影響なし） */
+.tile.is-disabled .tile__img {
+    filter: grayscale(15%) opacity(.85);
+}
+
+/* 半透明レイヤー（画像全面） */
+.sold-dim {
+    position: absolute;
+    inset: 0;
+    /* top:0 right:0 bottom:0 left:0 のショートハンド */
+    background: rgba(0, 0, 0, .35);
+}
+
+/* 中央 SOLD ラベル */
+.sold-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: .12em;
+    font-size: 18px;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+    pointer-events: none;
+}
+
+/* file入力は非表示 */
+.file-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    border: 0;
+}
+
+.btn-pick:hover {
+    filter: brightness(.95);
+}
+
+.btn-pick:active {
+    transform: translateY(1px);
+}
+
+.btn-pick:focus-visible {
+    outline: 2px solid #ffb3b3;
+    outline-offset: 2px;
+}
+
+/* 赤アウトラインボタン（塗りつぶし無し） */
+.btn.btn--outline-red {
+    background: transparent;
+    /* 塗りつぶし無し */
+    border: 1px solid #ff6b6b;
+    /* 赤い枠線 */
+    color: #ff6b6b;
+    /* 文字も赤 */
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-weight: 700;
+    line-height: 1;
+    transition: background-color .15s, transform .02s, filter .15s;
+}
+
+
+
+.btn.btn--outline-red:focus-visible {
+    outline: 2px solid #ffd1d1;
+    outline-offset: 2px;
+}

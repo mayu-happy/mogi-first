@@ -10,6 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
 
 class User extends Authenticatable
 {
@@ -27,7 +29,7 @@ class User extends Authenticatable
         'postal_code',
         'address',
         'building',
-        'image', 
+        'image',
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -83,7 +85,16 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute(): string
     {
-        $path = $this->image; 
-        return $path ? Storage::url($path) : asset('images/avatar-placeholder.png');
+        $path = $this->image;
+
+        if (!$path) {
+            return asset('images/avatar-placeholder.png'); 
+        }
+
+        if (Str::startsWith($path, ['http://', 'https://', '/'])) {
+            return $path;
+        }
+
+        return Storage::url($path);
     }
 }

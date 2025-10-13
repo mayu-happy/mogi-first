@@ -261,3 +261,13 @@
         padding: 4px 8px;
     }
 }
+
+.product-head .thumb {
+    width: 140px;
+    height: 140px;
+    border: 1px solid #eee;
+    border-radius: 6px;
+    background: #eee;
+    object-fit: cover;
+    display: block;
+}

@@ -2,22 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany; // 追加！
 
 class Category extends Model
 {
-    public $timestamps = false;
+    use HasFactory;
 
     protected $fillable = ['name'];
 
-    public function items(): BelongsToMany
+    public function items()
     {
-        return $this->belongsToMany(
-            Item::class,
-            'category_item',
-            'category_id',
-            'item_id'
-        )->withTimestamps();
+        return $this->belongsToMany(Item::class); // 中間: category_item を想定
     }
 }
