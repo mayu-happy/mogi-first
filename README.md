@@ -13,13 +13,11 @@ git clone git@github.com:mayu-happy/mogi-first.git mogi-first
 cd mogi-first
 ```
 
-
 ### 2) Docker ビルド & 起動
 
 ```bash
 docker compose up -d --build
 ```
-
 
 ### 3) Laravel 環境構築（コンテナ内）
 
@@ -53,13 +51,93 @@ php artisan migrate
 php artisan storage:link
 ```
 
-
 ---
 
-## PHPUnit テスト実行
+## PHPUnit テスト
+
+### 前提
+- Docker（`docker compose`）で起動する構成
+- **PHP サービス名は `app`、DB サービス名は `mysql`** を想定（異なる場合は読み替え）
+
+### 0) 起動（ホスト側、`docker-compose.yml` があるディレクトリで）
 
 ```bash
-php artisan test
+docker compose up -d
+docker compose ps
+```
+
+### 1) 依存導入＆アプリキー（初回のみ）
+
+```bash
+docker compose exec app bash -lc '
+composer install &&
+cp -n .env.example .env || true &&
+php artisan key:generate
+'
+```
+
+### 2) テストDBを作成（＆ユーザー権限付与）
+
+```bash
+docker compose exec mysql bash -lc 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" <<SQL
+CREATE DATABASE IF NOT EXISTS laravel_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS "laravel_user"@"%" IDENTIFIED BY "laravel_pass";
+GRANT ALL PRIVILEGES ON laravel_test.* TO "laravel_user"@"%";
+FLUSH PRIVILEGES;
+SQL'
+```
+
+### 3) `.env.testing` を作成
+
+```bash
+docker compose exec app bash -lc '
+[ -f .env.testing ] || cp .env .env.testing
+
+# 必要値を書き換え（テストは自動で .env.testing を使用）
+sed -i "s/^APP_ENV=.*/APP_ENV=testing/" .env.testing
+sed -i "s/^APP_DEBUG=.*/APP_DEBUG=true/" .env.testing
+
+sed -i "s/^DB_CONNECTION=.*/DB_CONNECTION=mysql/" .env.testing
+sed -i "s/^DB_HOST=.*/DB_HOST=mysql/" .env.testing
+sed -i "s/^DB_PORT=.*/DB_PORT=3306/" .env.testing
+sed -i "s/^DB_DATABASE=.*/DB_DATABASE=laravel_test/" .env.testing
+sed -i "s/^DB_USERNAME=.*/DB_USERNAME=laravel_user/" .env.testing
+sed -i "s/^DB_PASSWORD=.*/DB_PASSWORD=laravel_pass/" .env.testing
+
+# メールはログに捨てる（テスト実行時の副作用防止）
+if grep -q "^MAIL_MAILER=" .env.testing; then
+  sed -i "s/^MAIL_MAILER=.*/MAIL_MAILER=log/" .env.testing
+else
+  echo "MAIL_MAILER=log" >> .env.testing
+fi
+
+echo "---- .env.testing ----"
+grep -E "APP_ENV|APP_DEBUG|DB_HOST|DB_DATABASE|DB_USERNAME|DB_PASSWORD|MAIL_MAILER" .env.testing
+'
+```
+
+### 4) マイグレーション
+
+```bash
+# 開発用DB（必要なら）
+docker compose exec app bash -lc "php artisan migrate --force"
+
+# テスト用DB
+docker compose exec app bash -lc "php artisan migrate --force --env=testing"
+```
+
+### 5) ストレージリンク
+
+```bash
+docker compose exec app bash -lc "php artisan storage:link || true"
+```
+
+### 6) テスト実行
+
+```bash
+docker compose exec app bash -lc "php artisan test"
+# 例：特定のテストだけ
+# docker compose exec app bash -lc "php artisan test --filter=HomeTest"
 ```
 
 詳細表示が欲しい場合：
@@ -68,50 +146,25 @@ php artisan test
 vendor/bin/phpunit --testdox
 ```
 
-### テスト環境の .env（`.env.testing`）
-
-####  MySQL
-
-1. テストDBを作成（rootパスワードは docker-compose の環境変数に依存）
-
-```bash
-docker compose exec mysql bash -lc 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "CREATE DATABASE IF NOT EXISTS laravel_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"'
-```
-
-2. `.env.testing` を作成
-
-```ini
-APP_ENV=testing
-APP_KEY=base64:dummykeyfordevonly0123456789abcdef=
-APP_DEBUG=true
-
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-DB_DATABASE=laravel_test
-DB_USERNAME=laravel_user
-DB_PASSWORD=laravel_pass
-
-CACHE_DRIVER=array
-SESSION_DRIVER=array
-QUEUE_CONNECTION=sync
-MAIL_MAILER=log
-```
-
-
 ---
 
 ## 開発環境 URL
 
-* ホーム: [http://localhost](http://localhost)
-* 会員登録: [http://localhost/register](http://localhost/register)
-* phpMyAdmin: [http://localhost:8080](http://localhost:8080)
+- ホーム: <http://localhost>
+- 会員登録: <http://localhost/register>
+- phpMyAdmin: <http://localhost:8080>
+
+---
+
+## サンプルユーザー（ログイン用）
+* テスト　花子: so.happy0713@gmail.com / password12345678
+* テスト　次郎: test@example.com / password12345678
 
 ## サンプルユーザー投入（Seeder）
 
 下記 Seeder を追加して適用すると、上記 2 アカウントですぐログインできます。
 
-1) `database/seeders/TestUserSeeder.php` を作成し、次を保存：
+`database/seeders/TestUserSeeder.php` を作成し、次を保存：
 
 ```php
 <?php
@@ -145,9 +198,7 @@ class TestUserSeeder extends Seeder
 }
 ```
 
----
-
-2) コンテナ内で実行：
+コンテナ内で実行：
 
 ```bash
 docker compose exec php bash -lc "php artisan db:seed --class=TestUserSeeder"
