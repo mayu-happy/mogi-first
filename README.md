@@ -126,13 +126,6 @@ MAIL_MAILER=log
 
 ---
 
-## ER 図
-
-* `docs/er.png`（または `docs/er.drawio`）を参照してください。
-
----
-
-
 
 ## ER 図
 
