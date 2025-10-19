@@ -147,8 +147,9 @@ erDiagram
     string postal_code
     string address
     string building
-    timestamp email_verified_at
-    timestamps
+    datetime email_verified_at
+    datetime created_at
+    datetime updated_at
   }
 
   ITEMS {
@@ -160,7 +161,8 @@ erDiagram
     string brand
     string condition
     string img_url
-    timestamps
+    datetime created_at
+    datetime updated_at
   }
 
   ITEM_IMAGES {
@@ -168,20 +170,23 @@ erDiagram
     bigint item_id FK
     string path
     boolean is_main
-    timestamps
+    datetime created_at
+    datetime updated_at
   }
 
   CATEGORIES {
     bigint id PK
     string name
-    timestamps
+    datetime created_at
+    datetime updated_at
   }
 
   CATEGORY_ITEM {
     bigint id PK
     bigint item_id FK
     bigint category_id FK
-    timestamps
+    datetime created_at
+    datetime updated_at
   }
 
   COMMENTS {
@@ -189,21 +194,24 @@ erDiagram
     bigint user_id FK
     bigint item_id FK
     text body
-    timestamps
+    datetime created_at
+    datetime updated_at
   }
 
   FAVORITES {
     bigint id PK
     bigint user_id FK
     bigint item_id FK
-    timestamps
+    datetime created_at
+    datetime updated_at
   }
 
   LIKES {
     bigint id PK
     bigint user_id FK
     bigint item_id FK
-    timestamps
+    datetime created_at
+    datetime updated_at
   }
 
   PURCHASES {
@@ -214,9 +222,10 @@ erDiagram
     string postal_code
     string address
     string building
-    tinyint payment_method
-    tinyint status
-    timestamps
+    int payment_method
+    int status
+    datetime created_at
+    datetime updated_at
   }
 
   USERS ||--o{ ITEMS : sells
