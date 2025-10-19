@@ -8,3 +8,6 @@
 
 /.github export-ignore
 CHANGELOG.md export-ignore
+resources/js/* linguist-vendored
+webpack.mix.js linguist-vendored
+public/js/* linguist-generated
