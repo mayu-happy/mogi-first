@@ -90,7 +90,7 @@ SQL'
 ### 3) `.env.testing` を作成
 
 ```bash
-docker compose exec app bash -lc '
+docker compose exec php bash -lc '
 [ -f .env.testing ] || cp .env .env.testing
 
 # 必要値を書き換え（テストは自動で .env.testing を使用）
