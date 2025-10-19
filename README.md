@@ -120,24 +120,24 @@ grep -E "APP_ENV|APP_DEBUG|DB_HOST|DB_DATABASE|DB_USERNAME|DB_PASSWORD|MAIL_MAIL
 
 ```bash
 # 開発用DB（必要なら）
-docker compose exec app bash -lc "php artisan migrate --force"
+docker compose exec php bash -lc "php artisan migrate --force"
 
 # テスト用DB
-docker compose exec app bash -lc "php artisan migrate --force --env=testing"
+docker compose exec php bash -lc "php artisan migrate --force --env=testing"
 ```
 
 ### 5) ストレージリンク
 
 ```bash
-docker compose exec app bash -lc "php artisan storage:link || true"
+docker compose exec php bash -lc "php artisan storage:link || true"
 ```
 
 ### 6) テスト実行
 
 ```bash
-docker compose exec app bash -lc "php artisan test"
+docker compose exec php bash -lc "php artisan test"
 # 例：特定のテストだけ
-# docker compose exec app bash -lc "php artisan test --filter=HomeTest"
+# docker compose exec php bash -lc "php artisan test --filter=HomeTest"
 ```
 
 詳細表示が欲しい場合：
