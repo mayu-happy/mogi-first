@@ -1,0 +1,702 @@
+:root {
+    --bg: #fff;
+    --text: #222;
+    --muted: #777;
+    --line: #e9e9e9;
+    --primary: #ff6b6b;
+    --primary-600: #e65a5a;
+    --primary-700: #cc4f4f;
+    --chip: #ffefef;
+    --radius: 10px;
+    --shadow: 0 8px 24px rgba(0, 0, 0, .06);
+    --space: 12px;
+    --space-lg: 20px;
+    --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}
+
+html,
+body {
+    font-family: var(--font);
+    color: var(--text);
+    background: #fff;
+}
+
+img {
+    max-width: 100%;
+    display: block
+}
+
+.container {
+    max-width: 1080px;
+    padding: 0 16px;
+    margin: 24px auto
+}
+
+.line {
+    border-top: 1px solid var(--line);
+    margin: 18px 0
+}
+
+.panel {
+    border: 1px solid #f1f1f1;
+    border-radius: var(--radius);
+    padding: 16px;
+    background: var(--bg);
+    box-shadow: var(--shadow)
+}
+
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--muted);
+    background: #fafafa
+}
+
+/* タブ */
+.tabs {
+    display: flex;
+    gap: 18px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 16px
+}
+
+.tab {
+    display: inline-block;
+    padding: 10px 4px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent
+}
+
+.tab.is-active {
+    color: var(--text);
+    border-color: var(--primary)
+}
+
+/* ボタン */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--text);
+    transition: .15s
+}
+
+.btn:hover {
+    filter: brightness(.98)
+}
+
+.btn:disabled {
+    opacity: .55;
+    pointer-events: none
+}
+
+.btn--primary {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: #fff
+}
+
+.btn--primary:hover {
+    background: var(--primary-600)
+}
+
+.btn--ghost {
+    background: #fff;
+    border-color: var(--line)
+}
+
+.btn--danger {
+    background: #e5484d;
+    border-color: #e5484d;
+    color: #fff
+}
+
+/* フォーム */
+.input,
+.select,
+.textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    font: inherit
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+    outline: 0;
+    border-color: #d6d6d6;
+    box-shadow: 0 0 0 3px #f6f6f6
+}
+
+.form-row {
+    display: grid;
+    gap: 8px;
+    margin: 12px 0
+}
+
+.label {
+    font-size: 13px;
+    font-weight: 700
+}
+
+/* 商品グリッド */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px
+}
+
+@media (max-width:960px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr)
+    }
+}
+
+@media (max-width:640px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr)
+    }
+}
+
+.tile {
+    position: relative
+}
+
+.tile__link {
+    display: block;
+    text-decoration: none;
+    color: inherit
+}
+
+.tile__img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 12px;
+    background: #f6f6f6;
+    box-shadow: var(--shadow)
+}
+
+.tile__name {
+    margin-top: 8px;
+    font-weight: 600
+}
+
+.tile.is-sold .tile__link {
+    pointer-events: none;
+    cursor: default
+}
+
+.tile.is-sold .tile__img {
+    filter: grayscale(.2);
+    opacity: .85
+}
+
+.sold-pill {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--primary);
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: .12em;
+    padding: 6px 14px;
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+    user-select: none;
+    pointer-events: none
+}
+
+/* コメント：アバター＋本文 */
+.comment {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start
+}
+
+.avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    object-fit: cover;
+    background: #eee;
+    flex: none
+}
+
+/* フラッシュメッセージ */
+.flash {
+    position: fixed;
+    left: 50%;
+    top: 16px;
+    transform: translateX(-50%);
+    background: #111;
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 999px;
+    opacity: .95;
+    z-index: 50
+}
+
+/* ヘッダー微調整（順序：ログアウト／マイページ／出品） */
+.site-header .nav {
+    display: flex;
+    gap: 16px;
+    align-items: center
+}
+
+.nav__link {
+    text-decoration: none;
+    color: var(--text)
+}
+
+.nav__cta {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--text);
+    color: #fff;
+    text-decoration: none
+}
+
+/* ====== Header ====== */
+.site-header {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+.site-header__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* ロゴ */
+.site-header .logo {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.site-header .site-logo {
+    height: 24px;
+    /* ←これが消えると巨大化します */
+    display: block;
+}
+
+/* 検索 */
+.site-header .search {
+    flex: 1 1 auto;
+}
+
+.site-header .search input {
+    width: 260px;
+    /* 必要なら調整 */
+    max-width: 100%;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+/* 右ナビ */
+.site-header .nav {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.site-header .nav__link {
+    color: #222;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.site-header .nav__btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
+    color: #222;
+}
+
+.site-header .nav__cta {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #111;
+    color: #fff;
+    text-decoration: none;
+}
+
+.site-header .nav__cta:hover {
+    filter: brightness(.95);
+}
+
+/* ===== リセット / 基礎 ===== */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+.content {
+    padding: 16px 0 40px;
+}
+
+/* ===== ヘッダー ===== */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+.site-header__inner {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo img {
+    height: 24px;
+    display: block;
+}
+
+.search {
+    flex: 1;
+}
+
+.search input {
+    width: 100%;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav__btn {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+}
+
+.nav__cta {
+    padding: 6px 12px;
+    border-radius: 16px;
+    background: #111;
+    color: #fff;
+    border: 1px solid #111;
+}
+
+/* タブ（共通） */
+.tabs {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.tab {
+    padding: 6px 4px;
+    border-bottom: 2px solid transparent;
+    color: #666;
+}
+
+.tab.is-active {
+    color: #e65;
+    border-bottom-color: #e65;
+}
+
+/* ===== Header ===== */
+.site-header {
+    background: #000;
+    /* 黒ヘッダー */
+    color: #fff;
+}
+
+.site-header a {
+    color: inherit;
+}
+
+/* 左: ロゴ / 中央: 検索 / 右: ナビ の3分割 */
+.site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 1200px;
+    /* 任意のページ幅 */
+    margin: 0 auto;
+    padding: 10px 16px;
+}
+
+/* ロゴは固定幅のまま */
+.site-header .logo {
+    flex: 0 0 auto;
+}
+
+/* 検索フォームが “残り幅ぜんぶ” を使えるように */
+.site-header .search {
+    flex: 1 1 600px;
+    /* ここが肝。中央ブロックに可変幅を与える */
+    display: flex;
+}
+
+/* 入力欄そのものを100%にしてサイズ上限を設定 */
+.site-header .search input[type="text"],
+.site-header .search input[type="search"],
+.site-header .search input[name="q"] {
+    width: 100%;
+    min-width: 260px;
+    /* 極端に小さくならない下限 */
+    max-width: 840px;
+    /* 好みで広げるならここを大きくする（例: 900, 1000 など） */
+    height: 36px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+}
+
+/* 右側ナビ（ログイン/マイページ/出品）は内容分だけ */
+.site-header .nav {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* “出品” だけ白ボタンにしたい場合 */
+.site-header .nav .nav__cta {
+    background: #fff;
+    color: #000;
+    border-radius: 2px;
+    padding: 6px 12px;
+}
+
+/* ── Header nav link colors ───────────────────────────── */
+.site-header {
+    background: #000;
+}
+
+.site-header .nav .nav__link,
+.site-header .nav .nav__btn {
+    color: #fff;
+    /* ログイン／マイページ／ログアウトを白に */
+}
+
+/* a:link / :visited にも明示して “黒に戻される” のを防ぐ */
+.site-header .nav .nav__link:link,
+.site-header .nav .nav__link:visited {
+    color: #fff;
+}
+
+/* hover時は少しだけトーンダウン（お好みで） */
+.site-header .nav .nav__link:hover,
+.site-header .nav .nav__btn:hover {
+    opacity: .85;
+}
+
+/* 出品ボタンは白背景・黒文字で強調（既にある定義が弱い場合の保険） */
+.site-header .nav .nav__cta {
+    background: #fff;
+    color: #111;
+    border-radius: 9999px;
+    padding: 6px 14px;
+    font-weight: 700;
+}
+
+/* フォームボタンをリンクと同じ見た目に（ログアウトなど） */
+.site-header .nav .nav__btn {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+}
+
+header.site-header .nav .nav__cta {
+    border-radius: 6px !important;
+}
+
+/* -------- ベース: コンテナ幅を流体＋中央寄せ -------- */
+.site-header__inner,
+.main,
+.sell-container,
+.wrap,
+.container {
+    max-width: min(92vw, 1200px);
+    margin-inline: auto;
+}
+
+/* ヘッダーのレイアウトを柔軟に */
+.site-header__inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+}
+
+/* 検索フォームを大きめに拡張できるように */
+.site-header .search {
+    width: 100%;
+}
+
+.site-header .search input {
+    width: 100%;
+    min-width: 0;
+}
+
+/* --- PCレンジ（1400–1540px）: 余白と検索の比率を最適化 --- */
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .site-header__inner {
+        max-width: 1300px;
+    }
+
+    .site-header .search {
+        max-width: 740px;
+    }
+
+    /* 検索バーを広めに */
+    .tabs {
+        margin-top: 18px;
+        margin-bottom: 18px;
+    }
+
+    main {
+        padding-top: 10px;
+    }
+}
+
+/* --- タブレット（768–850px）: 余白・フォント・積み方を調整 --- */
+@media (min-width: 768px) and (max-width: 850px) {
+    .site-header__inner {
+        max-width: 92vw;
+        gap: 12px;
+    }
+
+    .site-header .logo .site-logo {
+        height: 20px;
+    }
+
+    .site-header .nav {
+        gap: 8px;
+    }
+
+    .site-header .search {
+        max-width: none;
+    }
+
+    .tabs {
+        gap: 12px;
+        margin-top: 14px;
+        margin-bottom: 16px;
+    }
+
+    .tab {
+        padding: 6px 10px;
+    }
+}
+
+/* ===== 画面の横幅（中央寄せコンテナ）を広く ===== */
+.container,
+.site-header .container {
+    max-width: 1280px;
+    /* ← 旧: 960/1024/1100 など */
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* さらに広い画面ではもう少し広げる（オプション） */
+@media (min-width: 1400px) {
+
+    .container,
+    .site-header .container {
+        max-width: 1400px;
+    }
+}
+
+@media (min-width: 1600px) {
+
+    .container,
+    .site-header .container {
+        max-width: 1520px;
+    }
+}
+
+.form-error {
+    color: #e53935;
+    /* はっきりした赤 */
+    font-size: 14px;
+    /* ログイン画面に合わせる */
+    line-height: 1.4;
+    margin: 6px 0 0;
+    /* 入力欄との間隔 */
+}
+
+/* ページネーションの矢印が巨大化する対策 */
+.pagination svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex: none;
+}
+
+/* ついでに見た目を整える（任意） */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 24px 0;
+}
+
+.pagination .page-link,
+.pagination a,
+.pagination span {
+    font-size: 14px;
+    line-height: 1;
+    padding: 8px 10px;
+}
