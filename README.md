@@ -69,7 +69,7 @@ docker compose ps
 ### 1) 依存導入＆アプリキー（初回のみ）
 
 ```bash
-docker compose exec app bash -lc '
+docker compose exec php bash -lc '
 composer install &&
 cp -n .env.example .env || true &&
 php artisan key:generate
