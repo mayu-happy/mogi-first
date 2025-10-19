@@ -33,21 +33,38 @@ cp .env.example .env
 ```
 
 `.env` の DB 設定：
-
-```ini
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-DB_DATABASE=laravel_db
-DB_USERNAME=laravel_user
-DB_PASSWORD=laravel_pass
-```
-
-キー生成・マイグレーション・ストレージ公開：
+*.envを用意
 
 ```bash
+[ -f .env ] || cp .env.example .env
+```
+*DB設定を書き換え
+```bash
+sed -i \
+ -e 's/^DB_CONNECTION=.*/DB_CONNECTION=mysql/' \
+ -e 's/^DB_HOST=.*/DB_HOST=mysql/' \
+ -e 's/^DB_PORT=.*/DB_PORT=3306/' \
+ -e 's/^DB_DATABASE=.*/DB_DATABASE=laravel_db/' \
+ -e 's/^DB_USERNAME=.*/DB_USERNAME=laravel_user/' \
+ -e 's/^DB_PASSWORD=.*/DB_PASSWORD=laravel_pass/' \
+ .env
+
+# 反映確認（DB_ 行だけ表示）
+grep -E '^DB_' .env
+
+```
+*アプリキー生成＆キャッシュ掃除
+```bash
 php artisan key:generate
-php artisan migrate
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+
+```
+
+ストレージ公開：
+
+```bash
 php artisan storage:link
 ```
 
