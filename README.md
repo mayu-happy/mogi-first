@@ -111,8 +111,8 @@ MAIL_MAILER=log
 
 テスト観点ごとに使い分けできるよう、**出品者**と**購入者**の2アカウントを用意しています。
 
-* 出品者: `seller@example.com` / `password12345678`
-* 購入者: `buyer@example.com`  / `password12345678`
+* テスト　花子: `so.happy0713@gmail.com` / `password12345678`
+* テスト　次郎: `test@example.com` / `password12345678`
 
 
 ## 使用技術（実行環境）
