@@ -109,14 +109,59 @@ MAIL_MAILER=log
 
 ## サンプルユーザー（ログイン用）
 
-テスト観点ごとに使い分けできるよう、**出品者**と**購入者**の2アカウントを用意しています。
-
 * テスト　花子: `so.happy0713@gmail.com` / `password12345678`
 * テスト　次郎: `test@example.com` / `password12345678`
 
+---
+
+## サンプルユーザー投入（Seeder）
+
+* 下記Seederを追加して適用すると、上記２アカウントですぐログインできます。
+* database/seeders/TestUserSeeder.php を作成し、次を保存：
+
+
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+class TestUserSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $users = [
+            ['name' => 'テスト 花子', 'email' => 'so.happy0713@gmail.com'],
+            ['name' => 'テスト 次郎', 'email' => 'test@example.com'],
+        ];
+
+        foreach ($users as $u) {
+            User::updateOrCreate(
+                ['email' => $u['email']],
+                [
+                    'name' => $u['name'],
+                    'password' => Hash::make('password12345678'),
+                    'email_verified_at' => now(),
+                ]
+            );
+        }
+    }
+}
+
+---
+
+* コンテナ内で実行：
+
+docker compose exec php bash -lc "php artisan db:seed --class=TestUserSeeder"
+
+
+* すでに同じメールのユーザーがある場合は上書き更新されます（updateOrCreate）。## 使用技術（実行環境）
+
+---
 
 ## 使用技術（実行環境）
-
 * **PHP 8.1**
 * **Laravel 10**
 * **MySQL 8.0.26**
@@ -125,14 +170,6 @@ MAIL_MAILER=log
 * テスト: **PHPUnit**
 
 ---
-
-## ER 図
-
-* `docs/er.png`（または `docs/er.drawio`）を参照してください。
-
----
-
-
 
 ## ER 図
 
