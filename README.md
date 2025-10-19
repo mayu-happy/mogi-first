@@ -198,14 +198,6 @@ erDiagram
     datetime updated_at
   }
 
-  FAVORITES {
-    bigint id PK
-    bigint user_id FK
-    bigint item_id FK
-    datetime created_at
-    datetime updated_at
-  }
-
   LIKES {
     bigint id PK
     bigint user_id FK
@@ -230,14 +222,11 @@ erDiagram
 
   USERS ||--o{ ITEMS : sells
   USERS ||--o{ COMMENTS : writes
-  USERS ||--o{ FAVORITES : likes
-  USERS ||--o{ LIKES : likes_legacy
+  USERS ||--o{ LIKES : likes
   USERS ||--o{ PURCHASES : buys
 
   ITEMS ||--o{ ITEM_IMAGES : has
   ITEMS ||--o{ COMMENTS : has
-  ITEMS ||--o{ FAVORITES : liked_by
-  ITEMS ||--o{ LIKES : liked_by_legacy
+  ITEMS ||--o{ LIKES : liked_by
   ITEMS ||--o{ PURCHASES : purchased_once
   ITEMS }o--o{ CATEGORIES : via_CATEGORY_ITEM
-
