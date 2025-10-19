@@ -20,7 +20,7 @@ class MyPageController extends Controller
      */
     public function profile(\Illuminate\Http\Request $request)
     {
-        $user = \Illuminate\Support\Facades\Auth::user()->loadCount(['items', 'purchases', 'favorites']);
+        $user = \Illuminate\Support\Facades\Auth::user()->loadCount(['items', 'purchases', 'likes']);
 
         $tab   = $request->query('tab', 'sell'); // sell|buy|likes
         $q     = trim((string) $request->query('q', ''));

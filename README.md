@@ -111,8 +111,8 @@ MAIL_MAILER=log
 
 テスト観点ごとに使い分けできるよう、**出品者**と**購入者**の2アカウントを用意しています。
 
-* 出品者: `seller@example.com` / `password12345678`
-* 購入者: `buyer@example.com`  / `password12345678`
+* テスト　花子: `so.happy0713@gmail.com` / `password12345678`
+* テスト　次郎: `test@example.com` / `password12345678`
 
 
 ## 使用技術（実行環境）
@@ -133,3 +133,100 @@ MAIL_MAILER=log
 ---
 
 
+
+## ER 図
+
+```mermaid
+erDiagram
+  USERS {
+    bigint id PK
+    string name
+    string email
+    string password
+    string image
+    string postal_code
+    string address
+    string building
+    datetime email_verified_at
+    datetime created_at
+    datetime updated_at
+  }
+
+  ITEMS {
+    bigint id PK
+    bigint user_id FK
+    string name
+    text description
+    int price
+    string brand
+    string condition
+    string img_url
+    datetime created_at
+    datetime updated_at
+  }
+
+  ITEM_IMAGES {
+    bigint id PK
+    bigint item_id FK
+    string path
+    boolean is_main
+    datetime created_at
+    datetime updated_at
+  }
+
+  CATEGORIES {
+    bigint id PK
+    string name
+    datetime created_at
+    datetime updated_at
+  }
+
+  CATEGORY_ITEM {
+    bigint id PK
+    bigint item_id FK
+    bigint category_id FK
+    datetime created_at
+    datetime updated_at
+  }
+
+  COMMENTS {
+    bigint id PK
+    bigint user_id FK
+    bigint item_id FK
+    text body
+    datetime created_at
+    datetime updated_at
+  }
+
+  LIKES {
+    bigint id PK
+    bigint user_id FK
+    bigint item_id FK
+    datetime created_at
+    datetime updated_at
+  }
+
+  PURCHASES {
+    bigint id PK
+    bigint user_id FK
+    bigint item_id FK
+    int price
+    string postal_code
+    string address
+    string building
+    int payment_method
+    int status
+    datetime created_at
+    datetime updated_at
+  }
+
+  USERS ||--o{ ITEMS : sells
+  USERS ||--o{ COMMENTS : writes
+  USERS ||--o{ LIKES : likes
+  USERS ||--o{ PURCHASES : buys
+
+  ITEMS ||--o{ ITEM_IMAGES : has
+  ITEMS ||--o{ COMMENTS : has
+  ITEMS ||--o{ LIKES : liked_by
+  ITEMS ||--o{ PURCHASES : purchased_once
+  ITEMS }o--o{ CATEGORIES : via_CATEGORY_ITEM
