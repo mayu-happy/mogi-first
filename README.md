@@ -107,19 +107,13 @@ MAIL_MAILER=log
 * 会員登録: [http://localhost/register](http://localhost/register)
 * phpMyAdmin: [http://localhost:8080](http://localhost:8080)
 
-## サンプルユーザー（ログイン用）
-
-* テスト　花子: `so.happy0713@gmail.com` / `password12345678`
-* テスト　次郎: `test@example.com` / `password12345678`
-
----
-
 ## サンプルユーザー投入（Seeder）
 
-* 下記Seederを追加して適用すると、上記２アカウントですぐログインできます。
-* database/seeders/TestUserSeeder.php を作成し、次を保存：
+下記 Seeder を追加して適用すると、上記 2 アカウントですぐログインできます。
 
+1) `database/seeders/TestUserSeeder.php` を作成し、次を保存：
 
+```php
 <?php
 
 namespace Database\Seeders;
@@ -149,25 +143,17 @@ class TestUserSeeder extends Seeder
         }
     }
 }
+```
 
 ---
 
-* コンテナ内で実行：
+2) コンテナ内で実行：
 
+```bash
 docker compose exec php bash -lc "php artisan db:seed --class=TestUserSeeder"
+```
 
-
-* すでに同じメールのユーザーがある場合は上書き更新されます（updateOrCreate）。## 使用技術（実行環境）
-
----
-
-## 使用技術（実行環境）
-* **PHP 8.1**
-* **Laravel 10**
-* **MySQL 8.0.26**
-* **nginx / php-fpm（Docker）**
-* 認証: **Laravel Fortify**
-* テスト: **PHPUnit**
+> すでに同じメールのユーザーがある場合は上書き更新されます（`updateOrCreate`）。
 
 ---
 
@@ -267,3 +253,4 @@ erDiagram
   ITEMS ||--o{ LIKES : liked_by
   ITEMS ||--o{ PURCHASES : purchased_once
   ITEMS }o--o{ CATEGORIES : via_CATEGORY_ITEM
+```
