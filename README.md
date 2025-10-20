@@ -88,27 +88,11 @@ php artisan key:generate
 '
 ```
 
-2) テスト用設定（.env.testing）
+2) テストDB準備（.env.testing）
 ```bash
-docker compose exec php bash -lc \
-'cp .env .env.testing && \
-sed -i "s/^DB_CONNECTION=.*/DB_CONNECTION=mysql/" .env.testing && \
-sed -i "s/^DB_HOST=.*/DB_HOST=mysql/" .env.testing && \
-sed -i "s/^DB_DATABASE=.*/DB_DATABASE=laravel_test/" .env.testing && \
-sed -i "s/^DB_USERNAME=.*/DB_USERNAME=laravel_user/" .env.testing && \
-sed -i "s/^DB_PASSWORD=.*/DB_PASSWORD=laravel_pass/" .env.testing'
-
-```
-
-3) テストDBを作成（MySQLコンテナ内）
-```bash
-docker compose exec mysql bash -lc '
-mysql -uroot -p"$MYSQL_ROOT_PASSWORD" -e "
-CREATE DATABASE IF NOT EXISTS laravel_test
-  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-GRANT ALL PRIVILEGES ON laravel_test.* TO \"laravel_user\"@\"%\" IDENTIFIED BY \"laravel_pass\";
-FLUSH PRIVILEGES;"
-'
+cp .env .env.testing
+vim .env.testing  # DB_DATABASE=laravel_test_db に変更
+php artisan migrate --env=testing
 
 ```
 
