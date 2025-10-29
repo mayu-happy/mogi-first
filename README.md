@@ -145,8 +145,8 @@ vendor/bin/phpunit --testdox
 
 ## ER 図
 
-```markdown
-```text
+```mermaid
+erDiagram
   USERS {
     bigint id PK
     string name
