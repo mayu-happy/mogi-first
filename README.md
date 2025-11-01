@@ -46,13 +46,14 @@ cp .env.example .env
 
 `.env` の DB 設定をこのように変更してください（抜粋）
 
+```env
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
-
+```
 
 ### 5) アプリキー生成
 ```bash
@@ -71,6 +72,22 @@ php artisan migrate --seed
 php artisan storage:link
 ```
 
+---
+### （オプション）権限エラーが出たとき
+
+ブラウザで表示したときに
+
+> The stream or file "/var/www/storage/logs/laravel.log" could not be opened in append mode: Permission denied
+
+のようなエラーが出る場合は、コンテナ内で書き込み権限を付けてください。
+
+```bash
+docker compose exec php bash
+cd /var/www
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+```
+---
 
 ## PHPUnit テスト実行手順
 
