@@ -1,0 +1,386 @@
+/* ========= SOLD (中央ピル) ========= */
+.tile {
+    position: relative;
+}
+
+/* 売り切れカードはクリック不可＆やや薄く */
+.tile.is-sold .tile__link {
+    pointer-events: none;
+    cursor: default;
+}
+
+.tile.is-sold .tile__img {
+    filter: grayscale(20%);
+    opacity: .85;
+}
+
+/* 基本：スマホ2列 */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+/* 念押しで各タイルのマーカーも無効化 */
+.grid .tile {
+    list-style: none;
+}
+
+/* 既存のカード系 */
+.tile__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+
+.tile__name {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* ===== page container ===== */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+    /* タブの下に余白を作る */
+}
+
+/* ===== tabs ===== */
+.tabs {
+    display: flex;
+    gap: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin: 8px 0 18px;
+    /* タブと商品グリッドの間を少し広げる */
+}
+
+.tab {
+    font-weight: 600;
+    padding-bottom: 8px;
+}
+
+.tab.is-active {
+    color: #ff6b6b;
+    border-bottom: 2px solid #ff6b6b;
+}
+
+/* ===== grid ===== */
+.grid {
+    list-style: none;
+    /* 先頭の「・」を消す */
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    /* 行間/列間を広めに */
+}
+
+.grid>li {
+    list-style: none;
+}
+
+/* タイル */
+.tile__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+
+.tile__name {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+/* SOLD 中央バッジ（クリック不可の重ね） */
+.tile {
+    position: relative;
+}
+
+.tile.is-sold .tile__link {
+    pointer-events: none;
+    opacity: .85;
+}
+
+.tile.is-sold::after {
+    content: "SOLD";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: .1em;
+    background: rgba(0, 0, 0, .28);
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+/* SOLD バッジを中央に出す */
+.tile__link {
+    position: relative;
+    display: block;
+}
+
+
+/* クリック無効の見た目（任意で薄く） */
+.tile__link.is-disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: .85;
+}
+
+/* タブとグリッドの間・段間のマージンを広げる */
+.tabs {
+    display: flex;
+    gap: 16px;
+    margin: 12px 0 18px;
+}
+
+/* PC（1400–1540px）: 6列に拡張して密度を上げる */
+@media (min-width: 1400px) and (max-width: 1540px) {
+    .grid {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .tabs {
+        margin-bottom: 20px;
+    }
+}
+
+/* タブレット：3列 */
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* PC：4列固定（全画面でも6列にならない） */
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+}
+
+/* SOLD バッジ（中央・シンプル） */
+.tile__link {
+    position: relative;
+    display: block;
+}
+
+/* SOLD バッジ：画像の中央にだけ乗せる（サイズはバッジ分だけ） */
+.sold-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, .55);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.grid--cap .tile {
+    width: 100%;
+    max-width: 320px;
+    /* 好きな上限に。280〜360pxあたりが見やすい */
+    justify-self: center;
+    /* グリッドのセル内で中央に */
+}
+
+/* 画像枠は比率固定（例：1:1） */
+.thumb,
+.product__media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #f3f3f3;
+}
+
+
+/* 画像なしのプレースホルダー */
+.noimage {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    /* 中央寄せ */
+    color: #9aa0a6;
+    font-weight: 700;
+    letter-spacing: .08em;
+    background:
+        linear-gradient(180deg, #f7f7f9, #eceff3);
+    /* ほんのりグラデ */
+    text-transform: uppercase;
+    /* NO IMAGE → 大文字 */
+    font-size: clamp(12px, 3vw, 18px);
+    user-select: none;
+}
+
+
+.noimage {
+    position: absolute;
+    inset: 0;
+    display: none;
+    place-items: center;
+    background: linear-gradient(180deg, #f7f7f9, #eceff3);
+    color: #9aa0a6;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-size: clamp(12px, 3vw, 16px);
+    user-select: none;
+}
+
+.noimage.is-visible {
+    display: grid;
+}
+
+.noimage {
+    position: absolute;
+    inset: 0;
+    display: none;
+    place-items: center;
+    background: linear-gradient(180deg, #f7f7f9, #eceff3);
+    color: #9aa0a6;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    font-size: clamp(12px, 3vw, 16px);
+}
+
+.noimage.is-visible {
+    display: grid;
+}
+
+/* 一覧の無効カード見た目（任意） */
+.tile__link--disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: .9;
+}
+
+/* 画像が見えない対策：JSなしでも常に表示 */
+.grid .tile__img {
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: static !important;
+}
+
+.grid .tile__thumb {
+    background: #f3f3f3;
+}
+
+/* === 一覧のタイル === */
+
+/* 画像の枠：比率固定（正方形）、画像は枠内に収める（トリミングなし） */
+.tile__thumb,
+.tile_thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* 4:3 にしたいなら 4/3、16:9なら 16/9 */
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #f3f3f3;
+    background-position: center;
+    background-size: contain;
+    /* ── ここが “枠内に収める”  */
+    background-repeat: no-repeat;
+}
+
+
+.tile__img,
+.tile_img {
+    display: none;
+}
+
+/* 画像枠：比率固定（正方形） */
+.grid .tile__thumb {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    /* 好みで 4/3 や 16/9 に変更可 */
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f3f3f3;
+}
+
+/* 画像を“枠内に収める”（トリミングしない） */
+.grid .tile__thumb>.tile__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain !important;
+    /* ← これが効けば必ず収まる */
+    display: block;
+    background: none;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* もし background-image をまだ使っているカードが混ざっていても“収める” */
+.grid .tile__thumb[style*="background-image"] {
+    background-size: contain !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+/* 売り切れタイル：クリック不可・見た目 */
+.tile.is-sold .tile__link {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.tile.is-sold .tile__img {
+    filter: grayscale(20%) opacity(.7);
+}
+
+
+/* 画像ラッパーに相対配置を保証（既にあれば不要） */
+.tile__thumb {
+    position: relative;
+    display: block;
+}
+
+/* 画像ラッパーは相対配置（オーバーレイを画像の上だけに載せる） */
+.tile__thumb {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    /* 角丸があれば画像に合わせて切る */
+    border-radius: inherit;
+    /* 画像の角丸に追従（任意） */
+}
+
+/* クリック不可の見た目はそのまま */
+.tile.is-disabled .tile__link {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* 画像だけを少し暗くする（テキストには影響なし） */
+.tile.is-disabled .tile__img {
+    filter: grayscale(15%) opacity(.85);
+}
+
+/* 半透明レイヤー（画像全面） */
+.sold-dim {
+    position: absolute;
+    inset: 0;
+    /* top:0 right:0 bottom:0 left:0 のショートハンド */
+    background: rgba(0, 0, 0, .35);
+}

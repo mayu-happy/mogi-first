@@ -1,0 +1,535 @@
+/* ===== Base & tokens ===== */
+* {
+    box-sizing: border-box
+}
+
+:root {
+    --fg: #222;
+    --muted: #6b7280;
+    --line: #e5e7eb;
+    --bg: #fff;
+    --brand: #111;
+    --accent: #ef4444;
+}
+
+html,
+body {
+    height: 100%
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans JP", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    color: var(--fg);
+    background: #fff
+}
+
+a {
+    color: #1f6feb;
+    text-decoration: none
+}
+
+a:hover {
+    opacity: .9
+}
+
+img {
+    max-width: 100%;
+    display: block
+}
+
+/* ===== Header ===== */
+.site-header {
+    background: #000;
+    color: #fff
+}
+
+.site-header__inner {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px
+}
+
+.logo__img {
+    height: 28px
+}
+
+.header-search {
+    flex: 1
+}
+
+.header-search input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    outline: 0
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 16px
+}
+
+.nav__cta {
+    background: #111;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px
+}
+
+.nav__btn {
+    background: none;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    padding: 0
+}
+
+/* ===== Layout ===== */
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 22px 16px
+}
+
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 8px 0 14px
+}
+
+.muted {
+    color: var(--muted)
+}
+
+/* ===== Tabs (ダミー) ===== */
+.tabs {
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 18px
+}
+
+.tab {
+    display: inline-block;
+    padding: 10px 2px;
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-weight: 600
+}
+
+.tab.is-active {
+    color: #ef4444;
+    border-color: #ef4444
+}
+
+/* ===== Grid cards（一覧） ===== */
+.grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    padding: 0;
+    margin: 0
+}
+
+@media (max-width:960px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr)
+    }
+}
+
+@media (max-width:680px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr)
+    }
+}
+
+.card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .04)
+}
+
+.card__link {
+    display: block;
+    color: inherit
+}
+
+.card__img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    background: #e5e7eb
+}
+
+.card__body {
+    padding: 10px 12px
+}
+
+.card__name {
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0 0 4px;
+    min-height: 2.6em
+}
+
+.card__price {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700
+}
+
+/* ===== Chips ===== */
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: #f3f4f6;
+    color: #374151;
+    font-size: 12px
+}
+
+/* ===== Buttons ===== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer
+}
+
+.btn--primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent)
+}
+
+.btn--ghost {
+    background: #fff;
+    color: #374151;
+    border-color: var(--line)
+}
+
+/* ===== Pagination（Laravel） ===== */
+.pagination {
+    margin-top: 18px
+}
+
+.pagination .page-link,
+.pagination .page-item {
+    font-size: 14px
+}
+
+/* ===== Product detail ===== */
+.product {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 26px
+}
+
+@media (max-width:980px) {
+    .product {
+        grid-template-columns: 1fr
+    }
+}
+
+.product__media {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px;
+    background: #fff
+}
+
+.product__img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    background: #e5e7eb;
+    border-radius: 8px
+}
+
+.product__title {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0 0 4px
+}
+
+.product__brand {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 8px
+}
+
+.product__price {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 8px 0 12px
+}
+
+.product__section {
+    margin: 18px 0
+}
+
+.product__section h2 {
+    font-size: 16px;
+    margin: 0 0 10px
+}
+
+.product__kv {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px 16px
+}
+
+.product__kv dt {
+    color: var(--muted)
+}
+
+.product__kv dd {
+    margin: 0
+}
+
+.badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap
+}
+
+.badge {
+    background: #f3f4f6;
+    border-radius: 999px;
+    padding: 2px 8px;
+    font-size: 12px
+}
+
+/* ===== Comments ===== */
+.comments {
+    display: grid;
+    gap: 12px
+}
+
+.comment {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 10px
+}
+
+.comment__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #e5e7eb
+}
+
+.comment__name {
+    font-weight: 700;
+    margin-bottom: 2px
+}
+
+.form {
+    display: grid;
+    gap: 10px
+}
+
+.form textarea {
+    width: 100%;
+    min-height: 120px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px;
+    resize: vertical
+}
+
+/* --- 見本寄せ：枠なしカード、金額非表示、タブ強調 --- */
+
+/* タブ */
+.tabs {
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid var(--line);
+    margin: 8px 0 18px;
+}
+
+.tab {
+    display: inline-block;
+    padding: 10px 2px;
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.tab.is-active {
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+/* 枠なしグリッド（画像＋商品名のみ） */
+.grid--plain {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+}
+
+@media (max-width:960px) {
+    .grid--plain {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width:680px) {
+    .grid--plain {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.tile {
+    list-style: none;
+}
+
+.tile__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.tile__img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    background: #e5e7eb;
+    border-radius: 0.5px;
+    /* 角丸が不要なら削除 */
+    /* 枠なしなので border/shadow は付けない */
+}
+
+.tile__name {
+    margin-top: 8px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* --- タブ --- */
+.tabs {
+    display: flex;
+    gap: 24px;
+    border-bottom: 1px solid var(--line);
+    margin: 8px 0 18px;
+}
+
+.tab {
+    display: inline-block;
+    padding: 10px 2px;
+    margin-bottom: -1px;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.tab.is-active {
+    color: #ef4444;
+    border-color: #ef4444;
+}
+
+/* --- 枠なしグリッド（画像＋商品名のみ） --- */
+.grid--plain {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 28px;
+}
+
+@media (max-width:960px) {
+    .grid--plain {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width:680px) {
+    .grid--plain {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.tile {
+    list-style: none;
+}
+
+.tile__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.tile__img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    background: #e5e7eb;
+    border-radius: 0.5px;
+    /* 角丸いらなければ削除 */
+}
+
+.tile__name {
+    margin-top: 8px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.site-header {
+    background: #000;
+    color: #fff;
+}
+
+.logo__img {
+    height: 28px;
+    display: block;
+    filter: none;
+}
+
+.logo svg {
+    height: 28px;
+    display: block;
+}
+
+.logo svg rect {
+    fill: transparent;
+}
+
+/* ← 長丸を透明にする */
+.logo svg text {
+    fill: #fff;
+}
+
+.form-error {
+    color: #e53935;
+    /* はっきりした赤 */
+    font-size: 14px;
+    /* ログイン画面に合わせる */
+    line-height: 1.4;
+    margin: 6px 0 0;
+    /* 入力欄との間隔 */
+}

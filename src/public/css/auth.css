@@ -1,0 +1,119 @@
+/* 画面全体の余白 */
+.auth-page {
+    padding: 56px 0 80px;
+}
+
+/* 中央のフォームラッパ（枠・影なし＝外枠を消す） */
+.auth {
+    width: min(560px, 92vw);
+    margin: 0 auto;
+}
+
+/* 見出し */
+.auth__title {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+/* ラベル */
+.auth label {
+    display: block;
+    font-size: 14px;
+    margin: 14px 0 6px;
+}
+
+/* 入力 */
+.auth input[type="email"],
+.auth input[type="text"],
+.auth input[type="password"] {
+    width: 100%;
+    height: 44px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* 送信ボタン（大きめ・赤） */
+.auth .btn-primary {
+    display: block;
+    width: 100%;
+    margin-top: 18px;
+    height: 46px;
+    border: 1px solid #e65;
+    background: #e65;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* 下のリンク（青） */
+.auth__link {
+    display: block;
+    text-align: center;
+    margin-top: 14px;
+    color: #2b73ff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.auth__link:hover {
+    text-decoration: underline;
+}
+
+/* 画面を少し大きく（タブレットでも見やすく） */
+@media (min-width: 768px) {
+    .auth__title {
+        font-size: 24px;
+    }
+
+    .auth input[type="email"],
+    .auth input[type="text"],
+    .auth input[type="password"] {
+        height: 48px;
+        font-size: 17px;
+    }
+
+    .auth .btn-primary {
+        height: 50px;
+        font-size: 17px;
+    }
+}
+
+.error-message {
+    color: #d93025;
+    /* 赤 */
+    font-size: 13px;
+    margin: 6px 0 0;
+}
+
+/* ---- Auth 共通エラーメッセージ ---- */
+.form-error {
+    color: #e53935;
+    /* はっきりした赤 */
+    font-size: 14px;
+    /* ログイン画面に合わせる */
+    line-height: 1.4;
+    margin: 6px 0 0;
+    /* 入力欄との間隔 */
+}
+
+/* ログインリンクを中央＆青に */
+.auth-foot {
+    text-align: center;
+    margin-top: 12px;
+}
+
+.auth-foot a {
+    color: #0d6efd !important;
+    /* 見本っぽい青。上書きされても効くように */
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.auth-foot a:hover {
+    text-decoration: none;
+    /* ホバー時も消したまま */
+}

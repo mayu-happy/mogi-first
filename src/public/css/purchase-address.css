@@ -1,0 +1,101 @@
+.addr-wrap {
+    width: min(720px, 100% - 48px);
+    margin: 32px auto 80px;
+}
+
+.addr-title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 22px;
+}
+
+.addr-form {
+    max-width: 520px;
+    margin: 0 auto;
+}
+
+.addr-field {
+    margin: 16px 0;
+}
+
+.addr-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.addr-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.addr-input:focus {
+    border-color: #ff6f6f;
+    box-shadow: 0 0 0 3px rgba(255, 111, 111, .15);
+}
+
+.addr-error {
+    color: #d33;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.addr-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 24px;
+}
+
+.btn-primary {
+    min-width: 160px;
+    height: 44px;
+    border-radius: 8px;
+    background: #ff6f6f;
+    color: #fff;
+    border: 1px solid transparent;
+    font-weight: 700;
+}
+
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    height: 44px;
+    border-radius: 8px;
+    background: #f7f8f9;
+    color: #444;
+    border: 1px solid #e5e7eb;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    filter: brightness(.98);
+}
+
+/* フォームはすでに max-width:520px; なので、それに合わせてボタンも全幅に */
+.addr-submit {
+    margin-top: 24px;
+}
+
+.addr-submit .btn-primary {
+    width: 100%;
+    /* ← 入力欄と同じ幅 */
+    height: 44px;
+    border-radius: 8px;
+    background: #ff6f6f;
+    color: #fff;
+    border: 1px solid transparent;
+    font-weight: 700;
+}
+
+.addr-submit .btn-primary:hover {
+    filter: brightness(.98);
+}
+
