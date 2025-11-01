@@ -27,10 +27,8 @@ docker compose up -d --build
 ```bash
 docker compose exec php bash
 ```
-
-```bash
-cd src
-```
+このプロジェクトでは、`./src` がコンテナ内の `/var/www` にマウントされます。  
+コンテナに入ったら **/var/www** で以下のコマンドを実行してください。
 
 ### 4) Laravelの準備　依存インストールと.env作成
 
@@ -57,7 +55,7 @@ DB_PASSWORD=laravel_pass
 php artisan key:generate
 ```
 
-### 6) マイグレーション
+### 6) マイグレーション&初期データ投入
 
 ```bash
 php artisan migrate --seed
@@ -81,7 +79,7 @@ docker compose up -d
 docker compose ps
 ```
 
-1) 依存導入＆アプリキー（初回のみ／PHPコンテナ内で実行）
+### 1) PHPコンテナに入って初期セットアップ（初回のみ）
 ```bash
 docker compose exec php bash
 ```
@@ -95,12 +93,12 @@ cp -n .env.example .env || true
 php artisan key:generate
 ```
 
-2) テストDB準備（.env.testing）
+### 2) テスト用.env.testingを用意
 ```bash
 cp .env .env.testing
 ```
 
-`.env.testing` 内のDB名をテスト用に変更してください
+`.env.testing` を開いて、テスト用のDB名にだけ変更してください。
 
 DB_CONNECTION=mysql
 DB_HOST=mysql
@@ -109,13 +107,13 @@ DB_DATABASE=laravel_test_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 
-4) テスト用マイグレーション（testing環境）
+### 3) テスト用マイグレーション（testing環境）
 ```bash
 php artisan migrate --env=testing --no-interaction
 
 ```
 
-5) テスト実行
+### 4) テスト実行
 ```bash
 php artisan test
 
@@ -142,6 +140,19 @@ vendor/bin/phpunit --testdox
 
 
 ---
+
+## フロントで使用している JavaScript
+
+このアプリでは、UIを分かりやすくするために以下の3か所で素の JavaScript（Blade内スクリプト）を使用しています。追加のビルド手順は不要です。
+
+1. **出品フォームの商品画像プレビュー**  
+   出品画面で商品画像ファイルを選択すると、その場でプレビュー画像を表示します。
+
+2. **プロフィール画像のプレビュー**  
+   マイページのプロフィール編集画面で、アイコン画像を選び直したときに即座に表示を更新します。
+
+3. **購入画面の支払い方法による金額表示の更新**  
+   購入画面で支払い方法をプルダウンから変更したときに、小計表示をJavaScriptで切り替えます。
 
 ## ER 図
 
