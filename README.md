@@ -27,8 +27,12 @@ docker compose up -d --build
 ```bash
 docker compose exec php bash
 ```
-このプロジェクトでは、`./src` がコンテナ内の `/var/www` にマウントされます。  
-コンテナに入ったら **/var/www** で以下のコマンドを実行してください。
+このプロジェクトでは、`./src` がコンテナ内の `/var/www/src` にマウントされます。  
+コンテナに入ったら必ず **/var/www/src** に移動してから以下のコマンドを実行してください。
+
+```bash
+cd /var/www/src
+```
 
 ### 4) Laravelの準備　依存インストールと.env作成
 
