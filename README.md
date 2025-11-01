@@ -105,6 +105,9 @@ docker compose ps
 docker compose exec php bash
 ```
 ```bash
+cd /var/www
+```
+```bash
 composer install
 ```
 ```bash
@@ -112,6 +115,9 @@ cp -n .env.example .env || true
 ```
 ```bash
 php artisan key:generate
+```
+```bash
+php artisan migrate --seed
 ```
 
 ### 2) テスト用.env.testingを用意
@@ -121,12 +127,14 @@ cp .env .env.testing
 
 `.env.testing` を開いて、テスト用のDB名にだけ変更してください。
 
+```env
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=laravel_test_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
+```
 
 ### 3) テスト用マイグレーション（testing環境）
 ```bash
