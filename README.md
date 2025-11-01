@@ -27,7 +27,7 @@ docker compose up -d --build
 ```bash
 docker compose exec php bash
 ```
-このプロジェクトでは、`./` がコンテナ内の `/var/www` にマウントされます。  
+このプロジェクトでは、`./src` がコンテナ内の `/var/www` にマウントされます。  
 コンテナに入ったら必ず **/var/www** に移動してから以下のコマンドを実行してください。
 
 ```bash
