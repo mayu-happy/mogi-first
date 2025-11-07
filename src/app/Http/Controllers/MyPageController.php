@@ -20,6 +20,13 @@ class MyPageController extends Controller
      */
     public function profile(\Illuminate\Http\Request $request)
     {
+        $user = $request->user();
+
+        $needs = empty($user->name); // 例：未設定判定
+        if ($needs && !$request->session()->pull('skip_profile_guard', false)) {
+            return redirect()->route('mypage.profile.edit');
+        }
+
         $user = \Illuminate\Support\Facades\Auth::user()->loadCount(['items', 'purchases', 'likes']);
 
         $tab   = $request->query('tab', 'sell'); // sell|buy|likes

@@ -384,3 +384,17 @@ main {
     /* top:0 right:0 bottom:0 left:0 のショートハンド */
     background: rgba(0, 0, 0, .35);
 }
+/* flash message */
+.flash {
+    margin: 16px 0;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.flash--success {
+    background: #e8f7ee;
+    border: 1px solid #9ad4b3;
+    color: #0b5a32;
+}

@@ -7,8 +7,12 @@
 @section('title','商品一覧')
 
 @section('content')
+@if (session('status'))
+<div class="flash flash--success" role="status">
+  {{ session('status') }}
+</div>
+@endif
 @php
-// Controller から来る想定の変数だが、保険で補完
 $tab = $tab ?? (request('tab') === 'mylist' ? 'mylist' : 'recommend');
 $q = $q ?? request('q');
 @endphp

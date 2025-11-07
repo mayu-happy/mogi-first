@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -36,9 +38,7 @@ class ProfileController extends Controller
         $user->fill($data)->save();
 
         // 初回はマイページのプロフィール表示へ
-        return redirect()
-            ->route('mypage.profile')
-            ->with('status', 'プロフィールを設定しました');
+        return redirect()->route('home')->with('status', 'プロフィールを設定しました');
     }
 
     // ② 編集（既存値で表示）
@@ -50,55 +50,52 @@ class ProfileController extends Controller
     }
 
     // ② 更新
+
     public function update(Request $request)
     {
-        $user = Auth::user();
-        $data = $this->validated($request);
+        abort(418, 'UPDATE HIT');
 
-        // 旧フィールド互換: zipcode -> postal_code
+        $rules = [
+            'name'        => ['required', 'string', 'max:255'],
+            'zipcode'     => ['nullable', 'string', 'max:10'],
+            'postal_code' => ['nullable', 'string', 'max:20'],
+            'address'     => ['nullable', 'string', 'max:255'],
+            'building'    => ['nullable', 'string', 'max:255'],
+            'image'       => ['nullable', 'image', 'max:5120'],
+        ];
+
+        $v = Validator::make($request->all(), $rules);
+        if ($v->fails()) {
+            \Log::info('VALIDATION failed', $v->errors()->toArray());
+            return back()->withErrors($v)->withInput();
+        }
+
+        $data = $v->validated();
+
+        // zipcode → postal_code の補完（任意）
         if (!empty($data['zipcode']) && empty($data['postal_code'])) {
-            $zip = preg_replace('/[^0-9]/', '', $data['zipcode']);
+            $zip = preg_replace('/\D/', '', $data['zipcode']);
             if (preg_match('/^\d{7}$/', $zip)) {
                 $data['postal_code'] = substr($zip, 0, 3) . '-' . substr($zip, 3);
             }
         }
         unset($data['zipcode']);
 
-        // 画像（上書き）
+        // 画像アップロード
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('profile_images', 'public');
         }
 
-        $user->fill($data)->save();
+        // ★ここで保存
+        $request->user()->fill($data)->save();
 
-        // return パラメータが自サイトURLなら優先
+        // 返り先（自サイトURLなら優先）
         $back    = (string) $request->input('return');
-        $canBack = $back && Str::startsWith($back, url('/'));
+        $canBack = $back && \Illuminate\Support\Str::startsWith($back, url('/'));
 
-        // 編集後は編集画面に留まるのが自然（必要なら profile へ変更OK）
         return $canBack
-            ? redirect()->to($back)->with('status', 'プロフィールを更新しました')
-            : redirect()->route('mypage.profile.edit')->with('status', 'プロフィールを更新しました');
-    }
-
-    // （使わないなら削除してOK）プロフィール表示
-    public function show()
-    {
-        $user  = auth()->user();
-
-        $sells = $user->items()
-            ->with(['mainImage', 'images'])
-            ->latest()
-            ->get();
-
-        $buys = $user->purchases()
-            ->with(['item.mainImage', 'item.images'])
-            ->latest()
-            ->get()
-            ->pluck('item')
-            ->filter();
-
-        return view('mypage.profile', compact('user', 'sells', 'buys'));
+            ? redirect()->to($back)->with('status', 'プロフィールを更新しました')->with('skip_profile_guard', true)
+            : redirect()->route('home')->with('status', 'プロフィールを更新しました')->with('skip_profile_guard', true);
     }
 
     // アバターだけ更新（別フォーム用）
@@ -119,7 +116,7 @@ class ProfileController extends Controller
         $user->image = $path;
         $user->save();
 
-        return back()->with('status', 'アイコンを更新しました');
+        return redirect()->route('home')->with('status', 'アイコンを更新しました');
     }
 
     // ===== 共通バリデーション =====
@@ -128,7 +125,8 @@ class ProfileController extends Controller
         return $request->validate([
             'name'         => ['required', 'string', 'max:255'],
             'zipcode'      => ['nullable', 'string', 'max:10'],              // 互換入力
-            'postal_code'  => ['nullable', 'regex:/^\d{3}-?\d{4}$/'],         // 123-4567 or 1234567
+            // 'postal_code'  => ['nullable', 'regex:/^\d{3}-?\d{4}$/'],         // 123-4567 or 1234567
+            'postal_code'  => ['nullable', 'string', 'max:20'], // ←いったんゆるく  
             'address'      => ['nullable', 'string', 'max:255'],
             'building'     => ['nullable', 'string', 'max:255'],
             'image'        => ['nullable', 'image', 'max:5120'],             // 5MB

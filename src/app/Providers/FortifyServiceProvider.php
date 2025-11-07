@@ -37,6 +37,16 @@ class FortifyServiceProvider extends ServiceProvider
     /** Bootstrap any application services. */
     public function boot(): void
     {
+        Fortify::authenticateUsing(
+            function (Request $request) {
+                $user = User::where('email', $request->email)->first();
+
+                if ($user && Hash::check($request->password, $user->password)) {
+                    return $user;
+                }
+
+                return null;
+
         // 認証画面
         Fortify::loginView(fn() => view('auth.login'));
         Fortify::registerView(fn() => view('auth.register'));

@@ -5,6 +5,11 @@
 <link rel="stylesheet" href="{{ asset('css/mypage-profile.css') }}?v=7">
 @endpush
 
+@if (session('status'))
+<div class="profile-success">{{ session('status') }}</div>
+@endif
+
+
 @section('content')
 <div class="profile-edit">
     <h1 class="title">プロフィール設定</h1>
@@ -45,49 +50,41 @@
         </form>
 
         {{-- ② プロフィール情報フォーム --}}
-        <form action="{{ route('mypage.profile.update') }}"
+        <form id="profileForm"
+            action="{{ route('mypage.profile.update') }}"
             method="POST"
+            enctype="multipart/form-data"
             class="profile-form">
             @csrf
             @method('PUT')
 
+            {{-- 入力項目 --}}
             <label class="profile-field">
                 <span class="profile-label">ユーザー名</span>
-                <input type="text"
-                    name="name"
-                    class="profile-input"
+                <input type="text" name="name" class="profile-input"
                     value="{{ old('name', $user->name) }}">
             </label>
 
             <label class="profile-field">
                 <span class="profile-label">郵便番号</span>
-                <input type="text"
-                    name="postal_code"
-                    class="profile-input"
+                <input type="text" name="postal_code" class="profile-input"
                     value="{{ old('postal_code', $user->postal_code) }}">
             </label>
 
             <label class="profile-field">
                 <span class="profile-label">住所</span>
-                <input type="text"
-                    name="address"
-                    class="profile-input"
+                <input type="text" name="address" class="profile-input"
                     value="{{ old('address', $user->address) }}">
             </label>
 
             <label class="profile-field">
                 <span class="profile-label">建物名</span>
-                <input type="text"
-                    name="building"
-                    class="profile-input"
+                <input type="text" name="building" class="profile-input"
                     value="{{ old('building', $user->building) }}">
             </label>
 
-            <button type="submit" class="submit-btn">
-                更新する
-            </button>
+            <button type="submit" class="submit-btn">更新する</button>
         </form>
-
     </div>
 </div>
 @endsection
@@ -116,7 +113,7 @@
             };
             reader.readAsDataURL(file);
 
-            form.submit();
+            // form.submit();
         });
     })();
 </script>

@@ -89,8 +89,8 @@ class SellController extends Controller
             'condition'   => ['required', 'string', 'max:50'],
             'brand'       => ['nullable', 'string', 'max:255'],
             'image'       => ['required', 'image', 'max:5120'],
-            'categories'  => ['array'], // 複数カテゴリ対応なら
-            'categories.*' => ['integer', 'exists:categories,id'],
+            'category_ids'   => ['array', 'min:1'],
+            'category_ids.*' => ['integer', 'exists:categories,id'],
         ]);
 
         // 画像保存
@@ -107,9 +107,9 @@ class SellController extends Controller
             'img_url'     => $relPath, // ★ 画像パスを items.img_url に
         ]);
 
-        // 中間テーブルにカテゴリを付与（必要な場合）
-        if (!empty($data['categories'])) {
-            $item->categories()->sync($data['categories']);
+        // 中間テーブルにカテゴリを付与
+        if (!empty($data['category_ids'])) {
+            $item->categories()->sync($data['category_ids']);
         }
 
         // サブ画像テーブルを使う場合はメイン画像として 1 レコード作っておく（オプション）

@@ -6,13 +6,11 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
     public function run(): void
     {
-        $this->call(ItemBulkSeeder::class);
+        $this->call([
+            CategorySeeder::class,   // ← 先にカテゴリ
+            ItemBulkSeeder::class,   // ← その後アイテム
+        ]);
     }
 }
