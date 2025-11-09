@@ -185,7 +185,6 @@ vendor/bin/phpunit --testdox
    （Laravel の `paginate()` メソッドを使用）
 
 
-```md
 ## ER 図
 
 ```mermaid
@@ -272,14 +271,14 @@ erDiagram
     datetime updated_at
   }
 
-  USERS ||--o{ ITEMS : sells
-  USERS ||--o{ COMMENTS : writes
-  USERS ||--o{ LIKES : likes
-  USERS ||--o{ PURCHASES : buys
+  USERS ||--o{ ITEMS      : "sells"
+  USERS ||--o{ COMMENTS   : "writes"
+  USERS ||--o{ LIKES      : "likes"
+  USERS ||--o{ PURCHASES  : "buys"
 
-  ITEMS ||--o{ ITEM_IMAGES : has
-  ITEMS ||--o{ COMMENTS : has
-  ITEMS ||--o{ LIKES : liked_by
-  ITEMS ||--o{ PURCHASES : purchased_once
-  ITEMS }o--o{ CATEGORIES : via_CATEGORY_ITEM
+  ITEMS ||--o{ ITEM_IMAGES : "has"
+  ITEMS ||--o{ COMMENTS    : "has"
+  ITEMS ||--o{ LIKES       : "liked by"
+  ITEMS ||--o{ PURCHASES   : "purchased once"
+  ITEMS }o--o{ CATEGORIES  : "via CATEGORY_ITEM"
 ```
