@@ -13,26 +13,22 @@ git clone git@github.com:mayu-happy/mogi-first.git
 ```
 ```bash
 cd mogi-first
-
 ```
+---
 
 ### 2) Docker ビルド & 起動
 
 ```bash
 docker compose up -d --build
 ```
+---
 
 ### 3) Laravel 環境構築（コンテナ内）
 
 ```bash
 docker compose exec php bash
 ```
-このプロジェクトでは、`./src` がコンテナ内の `/var/www` にマウントされます。  
-コンテナに入ったら必ず **/var/www** に移動してから以下のコマンドを実行してください。
-
-```bash
-cd /var/www
-```
+---
 
 ### 4) Laravelの準備　依存インストールと.env作成
 
@@ -54,59 +50,58 @@ DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 ```
+---
 
 ### 5) アプリキー生成
 ```bash
 php artisan key:generate
 ```
+---
 
 ### 6) マイグレーション&初期データ投入
 
 ```bash
 php artisan migrate --seed
 ```
+※カテゴリ、サンプル商品、サンプルユーザーが自動で生成されます。
+
+
+## サンプルユーザー
+
+| ユーザー名 | メールアドレス | パスワード |
+|-------------|----------------|-------------|
+| テスト一郎 | sample1@example.com | password |
+| テスト花子 | sample2@example.com | password |
+
 
 ### 7) ストレージを公開
 
 ```bash
 php artisan storage:link
 ```
-
 ---
-### （オプション）権限エラーが出たとき
 
-ブラウザで表示したときに
-
-> The stream or file "/var/www/storage/logs/laravel.log" could not be opened in append mode: Permission denied
-
-のようなエラーが出る場合は、コンテナ内で書き込み権限を付けてください。
-
-```bash
-docker compose exec php bash
-cd /var/www
-chown -R www-data:www-data storage bootstrap/cache
-chmod -R 775 storage bootstrap/cache
-```
----
 
 ## PHPUnit テスト実行手順
 
-### 0) 起動（ホスト側、`docker-compose.yml` があるディレクトリで）
+### 1) コンテナ起動（ホスト側、プロジェクトルート`mogi-first`ディレクトリで）
 
+コンテナをバックグラウンド起動します：
 ```bash
 docker compose up -d
 ```
+---
+コンテナが動いているか確認するには、次のコマンドを実行します：
 ```bash
 docker compose ps
 ```
+---
 
-### 1) PHPコンテナに入って初期セットアップ（初回のみ）
+### 2) 依存導入＆アプリキー作成（初回のみ／PHPコンテナ内で実行）
 ```bash
 docker compose exec php bash
 ```
-```bash
-cd /var/www
-```
+ここからはphpコンテナ内 (/var/www) で実行します：
 ```bash
 composer install
 ```
@@ -116,16 +111,15 @@ cp -n .env.example .env || true
 ```bash
 php artisan key:generate
 ```
-```bash
-php artisan migrate --seed
-```
+※すでに環境構築済みの場合は、このステップはスキップしてOKです。
 
-### 2) テスト用.env.testingを用意
+
+### 3) テストDB用の.env.testing作成
 ```bash
 cp .env .env.testing
 ```
 
-`.env.testing` を開いて、テスト用のDB名にだけ変更してください。
+`.env.testing` 内のDB設定をテスト用に変更してください（例）：
 
 ```env
 DB_CONNECTION=mysql
@@ -135,18 +129,19 @@ DB_DATABASE=laravel_test_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 ```
+---
 
-### 3) テスト用マイグレーション（testing環境）
+### 4) テスト用マイグレーション（testing環境）
 ```bash
 php artisan migrate --env=testing --no-interaction
-
 ```
+---
 
-### 4) テスト実行
+### 5) テスト実行
 ```bash
 php artisan test
-
 ```
+---
 
 または、詳細表示したい場合：
 
@@ -162,17 +157,10 @@ vendor/bin/phpunit --testdox
 - 会員登録: <http://localhost/register>
 
 ---
-
-## サンプルユーザー（ログイン用）
-* テスト　花子: so.happy0713@gmail.com / password12345678
-* テスト　次郎: test@example.com / password12345678
-
-
----
-
 ## フロントで使用している JavaScript
 
-このアプリでは、UIを分かりやすくするために以下の3か所で素の JavaScript（Blade内スクリプト）を使用しています。追加のビルド手順は不要です。
+このアプリでは、UIを分かりやすくするために以下の3か所で素の JavaScript（Blade 内スクリプト）を使用しています。  
+追加のビルド手順は不要です。
 
 1. **出品フォームの商品画像プレビュー**  
    出品画面で商品画像ファイルを選択すると、その場でプレビュー画像を表示します。
@@ -181,12 +169,26 @@ vendor/bin/phpunit --testdox
    マイページのプロフィール編集画面で、アイコン画像を選び直したときに即座に表示を更新します。
 
 3. **購入画面の支払い方法による金額表示の更新**  
-   購入画面で支払い方法をプルダウンから変更したときに、小計表示をJavaScriptで切り替えます。
+   購入画面で支払い方法をプルダウンから変更したときに、小計表示を JavaScript で切り替えます。
+
+
+## その他補足事項
+
+本アプリの以下の仕様変更については、コーチより事前に許可を得ています。
+
+1. **商品ダミーデータの追加**  
+   初期表示データを増やすことで、一覧・ページネーションの動作確認を容易にするため、  
+   Seeder にて商品サンプル件数を増やしています。
+
+2. **ページネーション機能の実装**  
+   商品一覧およびマイページで、可読性と操作性を考慮しページネーションを導入しています。  
+   （Laravel の `paginate()` メソッドを使用）
+
 
 ## ER 図
 
-```mermaid
-erDiagram
+```markdown
+```text
   USERS {
     bigint id PK
     string name
