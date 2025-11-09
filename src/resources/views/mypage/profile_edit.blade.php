@@ -5,12 +5,12 @@
 <link rel="stylesheet" href="{{ asset('css/mypage-profile.css') }}?v=7">
 @endpush
 
+@section('content')
+
 @if (session('status'))
 <div class="profile-success">{{ session('status') }}</div>
 @endif
 
-
-@section('content')
 <div class="profile-edit">
     <h1 class="title">プロフィール設定</h1>
 
@@ -47,6 +47,9 @@
             @error('image')
             <div class="profile-error">{{ $message }}</div>
             @enderror
+
+            <input type="hidden" name="_prevent_profile_submit" value="1">
+
         </form>
 
         {{-- ② プロフィール情報フォーム --}}
@@ -56,7 +59,17 @@
             enctype="multipart/form-data"
             class="profile-form">
             @csrf
-            @method('PUT')
+
+            {{-- エラーメッセージ --}}
+            @if ($errors->any())
+            <div class="profile-error">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
 
             {{-- 入力項目 --}}
             <label class="profile-field">

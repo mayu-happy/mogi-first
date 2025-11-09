@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\{
     ItemController,
     PurchaseController,
@@ -19,13 +18,6 @@ use App\Http\Controllers\{
 
 // Home
 Route::get('/', [ItemController::class, 'index'])->name('home');
-
-Route::get('/log-test', function () {
-    \File::append(storage_path('logs/direct-test.log'), now() . " WEB OK\n");
-    \Log::info('LOG FACADE OK from web');
-    return 'logged';
-});
-
 
 // Public
 Route::get('/login', [LoginController::class, 'show'])->name('login');
@@ -68,24 +60,28 @@ Route::middleware('auth')->group(function () {
 
     // ===== マイページ =====
     Route::prefix('mypage')->name('mypage.')->group(function () {
-        // ★ここを最上段に一時追加（他の /profile ルートより前！）
-        Route::put('/profile', function (\Illuminate\Http\Request $r) {
-            \Log::info('ROUTE LEVEL HIT', $r->only(['name', 'postal_code', 'address', 'building', '_method']));
-            return response('route level ok', 200);
-        })->name('profile.update');
+        // マイページトップ → プロフィールタブへ
         Route::get('/', fn() => redirect()->route('mypage.profile'))->name('index');
 
+        // プロフィール表示（マイページ）
         Route::get('/profile', [MyPageController::class, 'profile'])->name('profile');
+
+        // プロフィール編集画面
         Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 
-        Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        // ★ プロフィール更新用（URLを /profile/update に分ける）
+        Route::post('/profile/update', [ProfileController::class, 'update'])
+            ->name('profile.update');
 
+        // アバター更新
         Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])
             ->name('profile.avatar.update');
 
+        // タブ遷移
         Route::get('/sell',  fn() => redirect()->route('mypage.profile', ['tab' => 'sell']))->name('sell');
         Route::get('/buy',   fn() => redirect()->route('mypage.profile', ['tab' => 'buy']))->name('buy');
         Route::get('/likes', fn() => redirect()->route('mypage.profile', ['tab' => 'likes']))->name('likes');
+
         Route::get('/address', [AddressController::class, 'create'])->name('address');
     });
 });

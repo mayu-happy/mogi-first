@@ -53,26 +53,10 @@ class ProfileController extends Controller
 
     public function update(Request $request)
     {
-        abort(418, 'UPDATE HIT');
+        // create/store と共通のバリデーションルールを利用
+        $data = $this->validated($request);
 
-        $rules = [
-            'name'        => ['required', 'string', 'max:255'],
-            'zipcode'     => ['nullable', 'string', 'max:10'],
-            'postal_code' => ['nullable', 'string', 'max:20'],
-            'address'     => ['nullable', 'string', 'max:255'],
-            'building'    => ['nullable', 'string', 'max:255'],
-            'image'       => ['nullable', 'image', 'max:5120'],
-        ];
-
-        $v = Validator::make($request->all(), $rules);
-        if ($v->fails()) {
-            \Log::info('VALIDATION failed', $v->errors()->toArray());
-            return back()->withErrors($v)->withInput();
-        }
-
-        $data = $v->validated();
-
-        // zipcode → postal_code の補完（任意）
+        // zipcode → postal_code の補完を使わないなら、この if は消してOK
         if (!empty($data['zipcode']) && empty($data['postal_code'])) {
             $zip = preg_replace('/\D/', '', $data['zipcode']);
             if (preg_match('/^\d{7}$/', $zip)) {
@@ -81,21 +65,17 @@ class ProfileController extends Controller
         }
         unset($data['zipcode']);
 
-        // 画像アップロード
+        // プロフィールフォームで画像を扱うとき用（今は特に何も来なければスルー）
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('profile_images', 'public');
         }
 
-        // ★ここで保存
+        // ユーザー情報更新
         $request->user()->fill($data)->save();
 
-        // 返り先（自サイトURLなら優先）
-        $back    = (string) $request->input('return');
-        $canBack = $back && \Illuminate\Support\Str::startsWith($back, url('/'));
-
-        return $canBack
-            ? redirect()->to($back)->with('status', 'プロフィールを更新しました')->with('skip_profile_guard', true)
-            : redirect()->route('home')->with('status', 'プロフィールを更新しました')->with('skip_profile_guard', true);
+        // ★ここで必ずホーム画面へ戻す
+        return redirect()->route('home')
+            ->with('status', 'プロフィールを更新しました');
     }
 
     // アバターだけ更新（別フォーム用）
