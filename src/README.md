@@ -13,24 +13,22 @@ git clone git@github.com:mayu-happy/mogi-first.git
 ```
 ```bash
 cd mogi-first
-
 ```
+---
 
 ### 2) Docker ビルド & 起動
 
 ```bash
 docker compose up -d --build
 ```
+---
 
 ### 3) Laravel 環境構築（コンテナ内）
 
 ```bash
 docker compose exec php bash
 ```
-
-```bash
-cd src
-```
+---
 
 ### 4) Laravelの準備　依存インストールと.env作成
 
@@ -44,47 +42,66 @@ cp .env.example .env
 
 `.env` の DB 設定をこのように変更してください（抜粋）
 
+```env
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
-
+```
+---
 
 ### 5) アプリキー生成
 ```bash
 php artisan key:generate
 ```
+---
 
-### 6) マイグレーション
+### 6) マイグレーション&初期データ投入
 
 ```bash
 php artisan migrate --seed
 ```
+※カテゴリ、サンプル商品、サンプルユーザーが自動で生成されます。
+
+
+## サンプルユーザー
+
+| ユーザー名 | メールアドレス | パスワード |
+|-------------|----------------|-------------|
+| テスト一郎 | sample1@example.com | password |
+| テスト花子 | sample2@example.com | password |
+
 
 ### 7) ストレージを公開
 
 ```bash
 php artisan storage:link
 ```
+---
 
 
 ## PHPUnit テスト実行手順
 
-### 0) 起動（ホスト側、`docker-compose.yml` があるディレクトリで）
+### 1) コンテナ起動（ホスト側、プロジェクトルート`mogi-first`ディレクトリで）
 
+コンテナをバックグラウンド起動します：
 ```bash
 docker compose up -d
 ```
+---
+コンテナが動いているか確認するには、次のコマンドを実行します：
 ```bash
 docker compose ps
 ```
+---
 
-1) 依存導入＆アプリキー（初回のみ／PHPコンテナ内で実行）
+### 2) 依存導入＆アプリキー作成（初回のみ／PHPコンテナ内で実行）
 ```bash
 docker compose exec php bash
 ```
+ここからはphpコンテナ内 (/var/www) で実行します：
 ```bash
 composer install
 ```
@@ -94,32 +111,37 @@ cp -n .env.example .env || true
 ```bash
 php artisan key:generate
 ```
+※すでに環境構築済みの場合は、このステップはスキップしてOKです。
 
-2) テストDB準備（.env.testing）
+
+### 3) テストDB用の.env.testing作成
 ```bash
 cp .env .env.testing
 ```
 
-`.env.testing` 内のDB名をテスト用に変更してください
+`.env.testing` 内のDB設定をテスト用に変更してください（例）：
 
+```env
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
 DB_DATABASE=laravel_test_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
+```
+---
 
-4) テスト用マイグレーション（testing環境）
+### 4) テスト用マイグレーション（testing環境）
 ```bash
 php artisan migrate --env=testing --no-interaction
-
 ```
+---
 
-5) テスト実行
+### 5) テスト実行
 ```bash
 php artisan test
-
 ```
+---
 
 または、詳細表示したい場合：
 
@@ -136,12 +158,19 @@ vendor/bin/phpunit --testdox
 
 ---
 
-## サンプルユーザー（ログイン用）
-* テスト　花子: so.happy0713@gmail.com / password12345678
-* テスト　次郎: test@example.com / password12345678
+## その他補足事項
+
+本アプリの以下の仕様変更については、コーチ（クライアント役）より事前に許可を得ています。
+
+- **① 商品ダミーデータの追加**  
+  初期表示データを増やすことで、一覧・ページネーションの動作確認を容易にするため、  
+  Seeder にて商品サンプル件数を増やしています。
+
+- **② ページネーション機能の実装**  
+  商品一覧およびマイページで、可読性と操作性を考慮しページネーションを導入しています。  
+  （Laravel の `paginate()` メソッドを使用）
 
 
----
 
 ## ER 図
 
