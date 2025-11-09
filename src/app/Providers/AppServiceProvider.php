@@ -14,14 +14,17 @@ class AppServiceProvider extends ServiceProvider
         // ログイン後 → /
         $this->app->singleton(LoginResponse::class, LoginToHome::class);
 
-        // （保険）登録後 → /
-        $this->app->singleton(RegisterResponse::class, new class implements RegisterResponse {
-            public function toResponse($request)
-            {
-                return redirect()->to('/');
-            }
+        // 登録後 → /  無名クラスをクロージャの中で new する
+        $this->app->singleton(RegisterResponse::class, function () {
+            return new class implements RegisterResponse {
+                public function toResponse($request)
+                {
+                    return redirect()->route('home');
+                }
+            };
         });
     }
+
     public function boot(): void
     {
         // ログイン後 → / に強制
