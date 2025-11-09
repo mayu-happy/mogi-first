@@ -185,10 +185,11 @@ vendor/bin/phpunit --testdox
    （Laravel の `paginate()` メソッドを使用）
 
 
+```md
 ## ER 図
 
-```markdown
-```text
+```mermaid
+erDiagram
   USERS {
     bigint id PK
     string name
