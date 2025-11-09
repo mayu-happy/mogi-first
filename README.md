@@ -81,6 +81,39 @@ php artisan storage:link
 ```
 ---
 
+## ⚠️ 権限エラーが出た場合
+
+クローン直後や初回起動時に、以下のようなエラーが出ることがあります：
+
+The stream or file "/var/www/storage/logs/laravel.log" could not be opened in append mode: Failed to open stream: Permission denied
+
+
+この場合は、PHPコンテナ内で次のコマンドを実行して権限を修正してください。
+
+```bash
+docker compose exec php bash
+
+cd /var/www
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+```
+その後、ブラウザをリロードすると正常に表示されるようになります。
+
+
+## プロジェクト構成とコマンド実行場所
+このプロジェクトでは src/ ディレクトリに Laravel 本体 が入っています。
+
+composer や php artisan は、PHPコンテナ内の /var/www（= ホストの src/） で実行してください。
+
+毎回、次のコマンドで場所を確認すると安全です：
+```bash
+# コンテナ内
+pwd        # => /var/www になっていること
+ls artisan # => artisan ファイルが見えていること
+```
+
+
+
 
 ## PHPUnit テスト実行手順
 
@@ -156,7 +189,7 @@ vendor/bin/phpunit --testdox
 - ホーム: <http://localhost>
 - 会員登録: <http://localhost/register>
 
----
+
 ## フロントで使用している JavaScript
 
 このアプリでは、UIを分かりやすくするために以下の3か所で素の JavaScript（Blade 内スクリプト）を使用しています。  
