@@ -88,6 +88,58 @@ php artisan migrate --seed
 ```bash
 php artisan storage:link
 ```
+## 🧩 トラブルシュート：storage/logs の Permission denied エラー
+
+### 💡 発生するエラー例
+
+テストや画面表示時に、次のようなエラーが出ることがあります。
+
+```text
+UnexpectedValueException
+The stream or file "/var/www/storage/logs/laravel.log" could not be opened in append mode: Failed to open stream: Permission denied
+```
+
+---
+
+### 🔍 原因
+
+- `storage` や `bootstrap/cache` ディレクトリの所有者・権限が原因で  
+  Laravel がログファイル（`storage/logs/laravel.log`）に書き込めなくなっている状態です。
+
+---
+
+### 🛠 対処手順（PHPコンテナ内で実行）
+
+1. PHPコンテナに入る
+
+```bash
+docker compose exec php bash
+cd /var/www
+```
+
+2. `storage` / `bootstrap/cache` の権限を修正
+
+```bash
+chown -R www-data:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+```
+
+3. （必要に応じて）ログファイルを作り直す
+
+```bash
+rm -f storage/logs/laravel.log
+```
+
+> 💡 `laravel.log` は Laravel が自動で作り直すので、削除しても問題ありません。
+
+その後、もう一度アプリを表示したり、テストを実行してください。
+
+```bash
+php artisan test
+```
+
+✅ 上記の権限修正後は、同じエラーは解消されるはずです。
+
 
 ---
 
