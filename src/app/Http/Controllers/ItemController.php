@@ -95,9 +95,9 @@ class ItemController extends Controller
 
         if (Schema::hasTable('comments')) {
             $comments = $item->comments()
-                ->with('user:id,name')
+                ->with('user')      // ★ カラム絞らない
                 ->latest()
-                ->paginate(10)          // 件数はお好みで
+                ->paginate(10)
                 ->withQueryString();
         } else {
             $comments = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);

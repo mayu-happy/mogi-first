@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/item-show.css') }}?v=3">
+<link rel="stylesheet" href="{{ asset('css/item-show.css') }}?v=4">
 @endpush
 
 @section('title', $item->name)
@@ -117,18 +117,22 @@
           @foreach($comments as $cm)
           <li class="cmt">
             <div class="cmt__head">
+              {{-- ★ここだけで avatar_url を使う --}}
               <img
-                src="{{ optional($cm->user)->avatar_url ?? asset('images/noimage.svg') }}"
-                alt=""
+                src="{{ optional($cm->user)->avatar_url ?? asset('images/default-user.png') }}"
+                alt="{{ optional($cm->user)->name ?? '名無し' }}"
                 class="cmt__avatar">
+
               <span class="cmt__name">{{ optional($cm->user)->name ?? '名無し' }}</span>
             </div>
+
             <div class="cmt__bubble">{{ $cm->body }}</div>
           </li>
           @endforeach
         </ul>
         @endif
         <div class="field-label" style="font-weight:700;margin-bottom:6px;">商品へのコメント</div>
+
         {{-- ▼ 投稿フォーム --}}
         @auth
         <form method="POST" action="{{ route('items.comments.store', $item) }}" class="mt-8">

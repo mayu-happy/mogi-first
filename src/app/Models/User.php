@@ -84,16 +84,17 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute(): string
     {
-        $path = $this->image;
-
-        if (!$path) {
-            return asset('images/avatar-placeholder.png'); 
+        // DBに何も入ってない場合
+        if (empty($this->image)) {
+            return asset('images/default-user.png'); // 自前のデフォルト画像に差し替えOK
         }
 
-        if (Str::startsWith($path, ['http://', 'https://', '/'])) {
-            return $path;
+        // すでにフルURLが入っている場合
+        if (Str::startsWith($this->image, ['http://', 'https://'])) {
+            return $this->image;
         }
 
-        return Storage::url($path);
+        // storage/app/public 配下のパスとして扱う
+        return asset('storage/' . ltrim($this->image, '/'));
     }
 }
